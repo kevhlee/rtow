@@ -2,6 +2,8 @@ package trace.render;
 
 import trace.geometry.Ray3;
 import trace.geometry.Vec3;
+import trace.hittable.HitRecord;
+import trace.hittable.Hittable;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
@@ -19,7 +21,7 @@ public class Renderer {
         this.camera = camera;
     }
 
-    public RenderedImage render() {
+    public RenderedImage render(Hittable world) {
         int width = camera.getWidth();
         int height = camera.getHeight();
 
@@ -33,8 +35,9 @@ public class Renderer {
             for (int x = 0; x < width; x++) {
                 Ray3 ray = camera.buildRay(x, y);
 
-                bufferedImage.setRGB(
-                        x, height - (y + 1), toRGB(rayColor(ray)));
+                Vec3 color = rayColor(ray, world);
+
+                bufferedImage.setRGB(x, height - (y + 1), toRGB(color));
             }
         }
 
@@ -43,30 +46,24 @@ public class Renderer {
         return bufferedImage;
     }
 
-    private boolean hitSphere(Vec3 center, double radius, Ray3 ray) {
-        Vec3 oc = ray.getOrigin().sub(center);
-        Vec3 dir = ray.getDirection();
+    private Vec3 rayColor(Ray3 ray, Hittable world) {
+        HitRecord record = new HitRecord();
 
-        double a = dir.dot(dir);
-        double b = 2.0 * oc.dot(dir);
-        double c = oc.dot(oc) - radius * radius;
-        double discriminant = (b * b) - (4 * a * c);
-
-        return discriminant > 0;
-    }
-
-    private Vec3 rayColor(Ray3 ray) {
-        if (hitSphere(new Vec3(0, 0, -1), 0.5, ray)) {
-            return new Vec3(1, 0, 0);
+        if (world.hit(0, Double.MAX_VALUE, ray, record)) {
+            return record.getNormal().add(new Vec3(1, 1, 1)).mul(0.5);
         }
 
+        return backgroundColor(ray);
+    }
+
+    private Vec3 backgroundColor(Ray3 ray) {
         Vec3 unitDir = ray.getDirection().unit();
         double t = 0.5 * (unitDir.getY() + 1.0);
 
-        Vec3 color = new Vec3(1.0, 1.0, 1.0).mul(1.0 - t);
-        color = color.add(new Vec3(0.5, 0.7, 1.0).mul(t));
+        Vec3 background = new Vec3(1.0, 1.0, 1.0).mul(1.0 - t);
+        background = background.add(new Vec3(0.5, 0.7, 1.0).mul(t));
 
-        return color;
+        return background;
     }
 
     private int toRGB(Vec3 color) {
