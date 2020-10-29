@@ -1,5 +1,7 @@
 package trace.render;
 
+import trace.geometry.Vec3;
+
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 
@@ -19,17 +21,22 @@ public class Renderer {
                     "\rScanlines remaining: " + (height - y - 1) + " \b");
 
             for (int x = 0; x < width; x++) {
-                double r = (double) x / (width - 1);
-                double g = (double) y / (height - 1);
-                double b = 0.25;
+                Vec3 color = new Vec3(
+                        (double) x / (width - 1),
+                        (double) y / (height - 1),
+                        0.25);
 
-                bufferedImage.setRGB(x, height - (y + 1), toRGB(r, g, b));
+                bufferedImage.setRGB(x, height - (y + 1), toRGB(color));
             }
         }
 
         System.out.println("\nDone.");
 
         return bufferedImage;
+    }
+
+    private int toRGB(Vec3 color) {
+        return toRGB(color.getX(), color.getY(), color.getZ());
     }
 
     private int toRGB(double r, double g, double b) {

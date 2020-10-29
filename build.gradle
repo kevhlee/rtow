@@ -11,9 +11,13 @@ repositories {
 }
 
 dependencies {
-    implementation 'com.google.guava:guava:29.0-jre'
+    implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+}
 
-    testImplementation 'junit:junit:4.12'
+test {
+    useJUnitPlatform()
 }
 
 application {
