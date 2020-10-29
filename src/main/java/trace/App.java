@@ -26,12 +26,13 @@ public class App {
     public static void main(String[] args) {
         int width = 400;
         int height = 225;
+        double aspectRatio = (double) width / height;
 
-        Camera camera = new Camera(width, height);
-
+        Camera camera = new Camera(aspectRatio);
         Renderer renderer = new Renderer(camera);
-        
-        RenderedImage renderedImage = renderer.render(createWorld());
+
+        RenderedImage renderedImage =
+                renderer.render(createWorld(), width, height);
 
         try {
             ImageIO.write(renderedImage, "png", new File("render.png"));

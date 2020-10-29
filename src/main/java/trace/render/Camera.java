@@ -10,15 +10,12 @@ import trace.geometry.Vec3;
  */
 public class Camera {
 
-    private final int width;
-    private final int height;
     private final Vec3 origin;
     private final Vec3 horizontal;
     private final Vec3 vertical;
     private final Vec3 lowerLeftCorner;
 
-    public Camera(int width, int height) {
-        double aspectRatio = (double) width / height;
+    public Camera(double aspectRatio) {
         double viewportHeight = 2.0;
         double viewportWidth = aspectRatio * viewportHeight;
         double focalLength = 1.0;
@@ -31,27 +28,9 @@ public class Camera {
         lowerLeftCorner = lowerLeftCorner.sub(vertical.mul(0.5));
         lowerLeftCorner = lowerLeftCorner.sub(new Vec3(0, 0, focalLength));
         this.lowerLeftCorner = lowerLeftCorner;
-
-        this.width = width;
-        this.height = height;
     }
 
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public double getAspectRatio() {
-        return (double) width / height;
-    }
-
-    public Ray3 buildRay(int x, int y) {
-        double u = (double) x / (width - 1);
-        double v = (double) y / (height - 1);
-
+    public Ray3 buildRay(double u, double v) {
         Vec3 direction = lowerLeftCorner.add(horizontal.mul(u));
         direction = direction.add(vertical.mul(v));
         direction = direction.sub(origin);

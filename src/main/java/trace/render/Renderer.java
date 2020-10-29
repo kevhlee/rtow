@@ -15,16 +15,25 @@ import java.awt.image.RenderedImage;
  */
 public class Renderer {
 
+    public static final int DEFAULT_NUMBER_OF_SAMPLES = 100;
+
     private final Camera camera;
+    private int numberOfSamples;
 
     public Renderer(Camera camera) {
         this.camera = camera;
+        this.numberOfSamples = DEFAULT_NUMBER_OF_SAMPLES;
     }
 
-    public RenderedImage render(Hittable world) {
-        int width = camera.getWidth();
-        int height = camera.getHeight();
+    public int getNumberOfSamples() {
+        return numberOfSamples;
+    }
 
+    public void setNumberOfSamples(int numberOfSamples) {
+        this.numberOfSamples = numberOfSamples;
+    }
+
+    public RenderedImage render(Hittable world, int width, int height) {
         BufferedImage bufferedImage =
                 new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -33,11 +42,20 @@ public class Renderer {
                     "\rScanlines remaining: " + (height - y - 1) + " \b");
 
             for (int x = 0; x < width; x++) {
-                Ray3 ray = camera.buildRay(x, y);
+                Vec3 pixel = new Vec3(0, 0, 0);
 
-                Vec3 color = rayColor(ray, world);
+                for (int s = 0; s < numberOfSamples; s++) {
+                    double u = (x + Math.random()) / (width - 1);
+                    double v = (y + Math.random()) / (height - 1);
 
-                bufferedImage.setRGB(x, height - (y + 1), toRGB(color));
+                    Ray3 ray = camera.buildRay(u, v);
+
+                    pixel = pixel.add(rayColor(ray, world));
+                }
+
+                pixel = pixel.mul(1.0 / numberOfSamples);
+
+                bufferedImage.setRGB(x, height - (y + 1), toRGB(pixel));
             }
         }
 
@@ -71,11 +89,15 @@ public class Renderer {
     }
 
     private int toRGB(double r, double g, double b) {
-        int ir = (int) (255.999 * r);
-        int ig = (int) (255.999 * g);
-        int ib = (int) (255.999 * b);
+        int ir = (int) (256 * clamp(r, 0.0, 0.999));
+        int ig = (int) (256 * clamp(g, 0.0, 0.999));
+        int ib = (int) (256 * clamp(b, 0.0, 0.999));
 
         return (ir << 16) | (ig << 8) | ib;
+    }
+
+    private double clamp(double a, double min, double max) {
+        return Math.min(Math.max(a, min), max);
     }
 
 }
