@@ -43,7 +43,23 @@ public class Renderer {
         return bufferedImage;
     }
 
+    private boolean hitSphere(Vec3 center, double radius, Ray3 ray) {
+        Vec3 oc = ray.getOrigin().sub(center);
+        Vec3 dir = ray.getDirection();
+
+        double a = dir.dot(dir);
+        double b = 2.0 * oc.dot(dir);
+        double c = oc.dot(oc) - radius * radius;
+        double discriminant = (b * b) - (4 * a * c);
+
+        return discriminant > 0;
+    }
+
     private Vec3 rayColor(Ray3 ray) {
+        if (hitSphere(new Vec3(0, 0, -1), 0.5, ray)) {
+            return new Vec3(1, 0, 0);
+        }
+
         Vec3 unitDir = ray.getDirection().unit();
         double t = 0.5 * (unitDir.getY() + 1.0);
 
