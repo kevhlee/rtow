@@ -1,5 +1,6 @@
 package trace;
 
+import trace.render.Camera;
 import trace.render.Renderer;
 
 import javax.imageio.ImageIO;
@@ -10,12 +11,13 @@ import java.io.IOException;
 public class App {
 
     public static void main(String[] args) {
-        int width = 256;
-        int height = 256;
+        int width = 400;
+        int height = 225;
 
-        Renderer renderer = new Renderer();
+        Camera camera = new Camera(width, height);
+        Renderer renderer = new Renderer(camera);
 
-        RenderedImage renderedImage = renderer.render(width, height);
+        RenderedImage renderedImage = renderer.render();
 
         try {
             ImageIO.write(renderedImage, "png", new File("render.png"));

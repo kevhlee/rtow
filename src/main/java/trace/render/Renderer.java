@@ -1,5 +1,6 @@
 package trace.render;
 
+import trace.geometry.Ray3;
 import trace.geometry.Vec3;
 
 import java.awt.image.BufferedImage;
@@ -12,7 +13,16 @@ import java.awt.image.RenderedImage;
  */
 public class Renderer {
 
-    public RenderedImage render(int width, int height) {
+    private final Camera camera;
+
+    public Renderer(Camera camera) {
+        this.camera = camera;
+    }
+
+    public RenderedImage render() {
+        int width = camera.getWidth();
+        int height = camera.getHeight();
+
         BufferedImage bufferedImage =
                 new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -21,18 +31,26 @@ public class Renderer {
                     "\rScanlines remaining: " + (height - y - 1) + " \b");
 
             for (int x = 0; x < width; x++) {
-                Vec3 color = new Vec3(
-                        (double) x / (width - 1),
-                        (double) y / (height - 1),
-                        0.25);
+                Ray3 ray = camera.buildRay(x, y);
 
-                bufferedImage.setRGB(x, height - (y + 1), toRGB(color));
+                bufferedImage.setRGB(
+                        x, height - (y + 1), toRGB(rayColor(ray)));
             }
         }
 
         System.out.println("\nDone.");
 
         return bufferedImage;
+    }
+
+    private Vec3 rayColor(Ray3 ray) {
+        Vec3 unitDir = ray.getDirection().unit();
+        double t = 0.5 * (unitDir.getY() + 1.0);
+
+        Vec3 color = new Vec3(1.0, 1.0, 1.0).mul(1.0 - t);
+        color = color.add(new Vec3(0.5, 0.7, 1.0).mul(t));
+
+        return color;
     }
 
     private int toRGB(Vec3 color) {
