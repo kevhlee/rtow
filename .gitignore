@@ -1,0 +1,19 @@
+# MacOS
+.DS_Store
+
+# Java
+*.class
+
+# IntelliJ
+.idea
+*.iml
+
+# Visual Studio Code
+.vscode
+
+# Gradle
+.gradle
+build
+
+# Output images
+*.png
