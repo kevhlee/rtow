@@ -38,16 +38,17 @@ public class App {
     public static void main(String[] args) {
         // Image
         int width = 400;
-        int height = 225;
-        double vfov = 20.0;
+        int height = 256;
         double aspectRatio = (double) width / height;
 
         // Camera
-        Vec3 lookFrom = new Vec3(-2, 2, 1);
-        Vec3 lookAt = new Vec3(0, 0, -1);
+        Vec3 from = new Vec3(3, 3, 2);
+        Vec3 at = new Vec3(0, 0, -1);
         Vec3 up = new Vec3(0, 1, 0);
+        double distToFocus = from.sub(at).length();
 
-        Camera camera = new Camera(lookFrom, lookAt, up, vfov, aspectRatio);
+        Camera camera =
+                new Camera(from, at, up, 20, aspectRatio, 2.0, distToFocus);
 
         // Render
         Renderer renderer = new Renderer(camera);

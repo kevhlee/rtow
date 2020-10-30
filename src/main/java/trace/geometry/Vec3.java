@@ -51,6 +51,17 @@ public class Vec3 {
         return inUnitSphere;
     }
 
+    public static Vec3 randUnitDisk() {
+        Vec3 point = new Vec3(2 * Math.random() - 1, 2 * Math.random() - 1, 0);
+
+        while (point.lengthSq() >= 1) {
+            point.setX(2 * Math.random() - 1);
+            point.setY(2 * Math.random() - 1);
+        }
+
+        return point;
+    }
+
     public static Vec3 reflect(Vec3 v, Vec3 normal) {
         return v.sub(normal.mul(2 * v.dot(normal)));
     }
