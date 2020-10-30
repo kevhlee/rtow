@@ -4,6 +4,9 @@ import trace.geometry.Vec3;
 import trace.hittable.Hittable;
 import trace.hittable.HittableSet;
 import trace.hittable.Sphere;
+import trace.material.Lambertian;
+import trace.material.Material;
+import trace.material.Metal;
 import trace.render.Camera;
 import trace.render.Renderer;
 
@@ -15,12 +18,19 @@ import java.io.IOException;
 public class App {
 
     private static Hittable createWorld() {
-        HittableSet hittableSet = new HittableSet();
+        HittableSet world = new HittableSet();
 
-        hittableSet.add(new Sphere(0.5, new Vec3(0, 0, -1)));
-        hittableSet.add(new Sphere(100, new Vec3(0, -100.5, -1)));
+        Material leftMat = new Metal(new Vec3(0.8, 0.8, 0.8), 0.3);
+        Material rightMat = new Metal(new Vec3(0.8, 0.6, 0.2), 1.0);
+        Material groundMat = new Lambertian(new Vec3(0.8, 0.8, 0.0));
+        Material centerMat = new Lambertian(new Vec3(0.7, 0.3, 0.3));
 
-        return hittableSet;
+        world.add(new Sphere(100.0, new Vec3(0.0, -100.5, -1.0), groundMat));
+        world.add(new Sphere(0.5, new Vec3(0.0, 0.0, -1.0), centerMat));
+        world.add(new Sphere(0.5, new Vec3(-1.0, 0.0, -1.0), leftMat));
+        world.add(new Sphere(0.5, new Vec3(1.0, 0.0, -1.0), rightMat));
+
+        return world;
     }
 
     public static void main(String[] args) {

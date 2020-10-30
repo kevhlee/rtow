@@ -51,6 +51,10 @@ public class Vec3 {
         return inUnitSphere;
     }
 
+    public static Vec3 reflect(Vec3 v, Vec3 normal) {
+        return v.sub(normal.mul(2 * v.dot(normal)));
+    }
+
     public Vec3(double x, double y, double z) {
         this.x = x;
         this.y = y;

@@ -105,13 +105,14 @@ public class Renderer {
         }
 
         if (world.hit(tMin, tMax, ray, record)) {
-            Vec3 point = record.getPoint();
-            Vec3 normal = record.getNormal();
-            Vec3 target = point.add(normal).add(Vec3.randHemisphere(normal));
+            Ray3 scatter = new Ray3(new Vec3(0, 0, 0), new Vec3(0, 0, 0));
+            Vec3 attenuation = new Vec3(0, 0, 0);
 
-            Ray3 reflectRay = new Ray3(point, target.sub(point));
+            if (record.getMaterial().scatter(ray, record, attenuation, scatter)) {
+                return attenuation.mul(rayColor(scatter, world, record, depth + 1));
+            }
 
-            return rayColor(reflectRay, world, record, depth + 1).mul(0.5);
+            return new Vec3(0, 0, 0);
         }
 
         return backgroundColor(ray);
