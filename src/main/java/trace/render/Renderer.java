@@ -15,27 +15,62 @@ import java.awt.image.RenderedImage;
  */
 public class Renderer {
 
+    public static final double DEFAULT_T_MIN = 0.001;
+    public static final double DEFAULT_T_MAX = Double.MAX_VALUE;
+    public static final int DEFAULT_MAX_RAY_DEPTH = 50;
     public static final int DEFAULT_NUMBER_OF_SAMPLES = 100;
 
     private final Camera camera;
+    private double tMin;
+    private double tMax;
+    private int maxRayDepth;
     private int numberOfSamples;
 
     public Renderer(Camera camera) {
         this.camera = camera;
+        this.tMin = DEFAULT_T_MIN;
+        this.tMax = DEFAULT_T_MAX;
+        this.maxRayDepth = DEFAULT_MAX_RAY_DEPTH;
         this.numberOfSamples = DEFAULT_NUMBER_OF_SAMPLES;
+    }
+
+    public int getMaxRayDepth() {
+        return maxRayDepth;
     }
 
     public int getNumberOfSamples() {
         return numberOfSamples;
     }
 
+    public double getMinT() {
+        return tMin;
+    }
+
+    public double getMaxT() {
+        return tMax;
+    }
+
     public void setNumberOfSamples(int numberOfSamples) {
         this.numberOfSamples = numberOfSamples;
+    }
+
+    public void setMaxRayDepth(int maxRayDepth) {
+        this.maxRayDepth = maxRayDepth;
+    }
+
+    public void setMinT(double tMin) {
+        this.tMin = tMin;
+    }
+
+    public void setMaxT(double tMax) {
+        this.tMax = tMax;
     }
 
     public RenderedImage render(Hittable world, int width, int height) {
         BufferedImage bufferedImage =
                 new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        HitRecord record = new HitRecord();
 
         for (int y = 0; y < height; y++) {
             System.out.print(
@@ -50,10 +85,8 @@ public class Renderer {
 
                     Ray3 ray = camera.buildRay(u, v);
 
-                    pixel = pixel.add(rayColor(ray, world));
+                    pixel = pixel.add(rayColor(ray, world, record, 0));
                 }
-
-                pixel = pixel.mul(1.0 / numberOfSamples);
 
                 bufferedImage.setRGB(x, height - (y + 1), toRGB(pixel));
             }
@@ -64,11 +97,21 @@ public class Renderer {
         return bufferedImage;
     }
 
-    private Vec3 rayColor(Ray3 ray, Hittable world) {
-        HitRecord record = new HitRecord();
+    private Vec3 rayColor(
+            Ray3 ray, Hittable world, HitRecord record, int depth) {
 
-        if (world.hit(0, Double.MAX_VALUE, ray, record)) {
-            return record.getNormal().add(new Vec3(1, 1, 1)).mul(0.5);
+        if (depth >= maxRayDepth) {
+            return new Vec3(0, 0, 0);
+        }
+
+        if (world.hit(tMin, tMax, ray, record)) {
+            Vec3 point = record.getPoint();
+            Vec3 normal = record.getNormal();
+            Vec3 target = point.add(normal).add(Vec3.randHemisphere(normal));
+
+            Ray3 reflectRay = new Ray3(point, target.sub(point));
+
+            return rayColor(reflectRay, world, record, depth + 1).mul(0.5);
         }
 
         return backgroundColor(ray);
@@ -89,6 +132,10 @@ public class Renderer {
     }
 
     private int toRGB(double r, double g, double b) {
+        r = Math.sqrt(r / numberOfSamples);
+        g = Math.sqrt(g / numberOfSamples);
+        b = Math.sqrt(b / numberOfSamples);
+
         int ir = (int) (256 * clamp(r, 0.0, 0.999));
         int ig = (int) (256 * clamp(g, 0.0, 0.999));
         int ib = (int) (256 * clamp(b, 0.0, 0.999));

@@ -11,6 +11,46 @@ public class Vec3 {
     private double y;
     private double z;
 
+    public static Vec3 rand() {
+        return rand(0, 1);
+    }
+
+    public static Vec3 rand(double min, double max) {
+        double x = (max - min) * Math.random() + min;
+        double y = (max - min) * Math.random() + min;
+        double z = (max - min) * Math.random() + min;
+
+        return new Vec3(x, y, z);
+    }
+
+    public static Vec3 randUnitSphere() {
+        Vec3 point = rand(-1, 1);
+
+        while (point.lengthSq() >= 1) {
+            point = rand(-1, 1);
+        }
+
+        return point;
+    }
+
+    public static Vec3 randUnit() {
+        double a = Math.random() * 2 * Math.PI;
+        double z = 2 * Math.random() - 1;
+        double r = Math.sqrt(1 - z * z);
+
+        return new Vec3(r * Math.cos(a), r * Math.sin(a), z);
+    }
+
+    public static Vec3 randHemisphere(Vec3 normal) {
+        Vec3 inUnitSphere = randUnitSphere();
+
+        if (inUnitSphere.dot(normal) <= 0.0) {
+            return inUnitSphere.neg();
+        }
+
+        return inUnitSphere;
+    }
+
     public Vec3(double x, double y, double z) {
         this.x = x;
         this.y = y;
