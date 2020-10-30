@@ -85,7 +85,8 @@ public class Renderer {
 
                     Ray3 ray = camera.buildRay(u, v);
 
-                    pixel = pixel.add(rayColor(ray, world, record, 0));
+                    pixel = pixel.add(
+                            rayColor(ray, world, record, 0));
                 }
 
                 bufferedImage.setRGB(x, height - (y + 1), toRGB(pixel));
@@ -105,11 +106,10 @@ public class Renderer {
         }
 
         if (world.hit(tMin, tMax, ray, record)) {
-            Ray3 scatter = new Ray3(new Vec3(0, 0, 0), new Vec3(0, 0, 0));
             Vec3 attenuation = new Vec3(0, 0, 0);
 
-            if (record.getMaterial().scatter(ray, record, attenuation, scatter)) {
-                return attenuation.mul(rayColor(scatter, world, record, depth + 1));
+            if (record.getMaterial().scatter(ray, record, attenuation)) {
+                return attenuation.mul(rayColor(ray, world, record, depth + 1));
             }
 
             return new Vec3(0, 0, 0);

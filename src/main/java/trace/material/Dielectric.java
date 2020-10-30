@@ -18,15 +18,13 @@ public class Dielectric implements Material {
     }
 
     @Override
-    public boolean scatter(
-            Ray3 in, HitRecord record, Vec3 attenuation, Ray3 scatter) {
-
+    public boolean scatter(Ray3 ray, HitRecord record, Vec3 attenuation) {
         attenuation.setX(1.0);
         attenuation.setY(1.0);
         attenuation.setZ(1.0);
 
         Vec3 normal = record.getNormal();
-        Vec3 unitDir = in.getDirection().unit();
+        Vec3 unitDir = ray.getDirection().unit();
 
         double cosTheta = Math.min(unitDir.neg().dot(normal), 1.0);
         double sinTheta = Math.sqrt(1.0 - cosTheta * cosTheta);
@@ -42,8 +40,8 @@ public class Dielectric implements Material {
             direction = Vec3.refract(unitDir, normal, refractRatio);
         }
 
-        scatter.setOrigin(record.getPoint());
-        scatter.setDirection(direction);
+        ray.setOrigin(record.getPoint());
+        ray.setDirection(direction);
 
         return true;
     }

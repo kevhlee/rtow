@@ -16,11 +16,9 @@ public class Lambertian extends AbstractMaterial {
     }
 
     @Override
-    public boolean scatter(
-            Ray3 in, HitRecord record, Vec3 attenuation, Ray3 scatter) {
-
-        scatter.setOrigin(record.getPoint());
-        scatter.setDirection(record.getNormal().add(Vec3.randUnit()));
+    public boolean scatter(Ray3 ray, HitRecord record, Vec3 attenuation) {
+        ray.setOrigin(record.getPoint());
+        ray.setDirection(record.getNormal().add(Vec3.randUnit()));
 
         Vec3 albedo = getAlbedo();
 
