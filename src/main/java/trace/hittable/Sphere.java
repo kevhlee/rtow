@@ -9,20 +9,20 @@ import trace.material.Material;
  *
  * @author Kevin Lee
  */
-public class Sphere implements Hittable {
+public class Sphere extends AbstractHittable {
 
     private final Vec3 center;
     private final double radius;
-    private final Material material;
 
     public Sphere(double radius, Vec3 center, Material material) {
+        super(material);
+
         this.center = center;
         this.radius = radius;
-        this.material = material;
     }
 
     @Override
-    public boolean hit(double tMin, double tMax, Ray3 ray, HitRecord record) {
+    public boolean hit(double tMin, double tMax, Ray3 ray, HitRecord rec) {
         Vec3 oc = ray.getOrigin().sub(center);
         Vec3 dir = ray.getDirection();
 
@@ -38,10 +38,10 @@ public class Sphere implements Hittable {
             double t1 = (-halfB + root) / a;
 
             if (t0 < tMax && t0 > tMin) {
-                return record.record(t0, tMin, tMax, ray, this);
+                return rec.record(t0, tMin, tMax, ray, this);
             }
             if (t1 < tMax && t1 > tMin) {
-                return record.record(t1, tMin, tMax, ray, this);
+                return rec.record(t1, tMin, tMax, ray, this);
             }
         }
 
@@ -51,11 +51,6 @@ public class Sphere implements Hittable {
     @Override
     public Vec3 getSurfaceNormal(Vec3 point) {
         return point.sub(center).mul(1 / radius);
-    }
-
-    @Override
-    public Material getMaterial() {
-        return material;
     }
 
 }

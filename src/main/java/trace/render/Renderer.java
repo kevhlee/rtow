@@ -3,7 +3,6 @@ package trace.render;
 import trace.geometry.Ray3;
 import trace.geometry.Vec3;
 import trace.hittable.HitRecord;
-import trace.hittable.Scene;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;

@@ -1,8 +1,6 @@
 package trace;
 
 import trace.geometry.Vec3;
-import trace.hittable.Hittable;
-import trace.hittable.HittableSet;
 import trace.hittable.Sphere;
 import trace.material.Dielectric;
 import trace.material.Lambertian;
@@ -10,6 +8,7 @@ import trace.material.Material;
 import trace.material.Metal;
 import trace.render.Camera;
 import trace.render.Renderer;
+import trace.render.Scene;
 
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;
@@ -18,11 +17,11 @@ import java.io.IOException;
 
 public class App {
 
-    private static Hittable randomScene() {
-        HittableSet world = new HittableSet();
+    private static Scene randomScene() {
+        Scene scene = new Scene();
 
         Material groundMat = new Lambertian(new Vec3(0.5, 0.5, 0.5));
-        world.add(new Sphere(1000, new Vec3(0, -1000, 0), groundMat));
+        scene.add(new Sphere(1000, new Vec3(0, -1000, 0), groundMat));
 
         for (int a = -11; a < 11; a++) {
             for (int b = -11; b < 11; b++) {
@@ -48,7 +47,7 @@ public class App {
                         sphereMat = new Dielectric(1.5);
                     }
 
-                    world.add(new Sphere(0.2, center, sphereMat));
+                    scene.add(new Sphere(0.2, center, sphereMat));
                 }
             }
         }
@@ -57,11 +56,11 @@ public class App {
         Material mat2 = new Lambertian(new Vec3(0.4, 0.2, 0.1));
         Material mat3 = new Metal(new Vec3(0.7, 0.6, 0.5), 0.0);
 
-        world.add(new Sphere(1.0, new Vec3(0, 1, 0), mat1));
-        world.add(new Sphere(1.0, new Vec3(-4, 1, 0), mat2));
-        world.add(new Sphere(1.0, new Vec3(4, 1, 0), mat3));
+        scene.add(new Sphere(1.0, new Vec3(0, 1, 0), mat1));
+        scene.add(new Sphere(1.0, new Vec3(-4, 1, 0), mat2));
+        scene.add(new Sphere(1.0, new Vec3(4, 1, 0), mat3));
 
-        return world;
+        return scene;
     }
 
     public static void main(String[] args) {

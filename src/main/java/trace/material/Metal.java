@@ -20,13 +20,12 @@ public class Metal extends AbstractMaterial {
     }
 
     @Override
-    public boolean scatter(Ray3 ray, HitRecord record, Vec3 attenuation) {
-
-        Vec3 normal = record.getNormal();
+    public boolean scatter(Ray3 ray, HitRecord rec, Vec3 attenuation) {
+        Vec3 normal = rec.getNormal();
         Vec3 reflectDir = Vec3.reflect(ray.getDirection().unit(), normal);
 
         if (reflectDir.dot(normal) > 0) {
-            ray.setOrigin(record.getPoint());
+            ray.setOrigin(rec.getPoint());
             ray.setDirection(
                     reflectDir.add(Vec3.randUnitSphere().mul(fuzz)));
 

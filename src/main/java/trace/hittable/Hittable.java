@@ -11,7 +11,7 @@ import trace.material.Material;
  */
 public interface Hittable {
 
-    boolean hit(double tMin, double tMax, Ray3 ray, HitRecord record);
+    boolean hit(double tMin, double tMax, Ray3 ray, HitRecord rec);
 
     Vec3 getSurfaceNormal(Vec3 point);
 

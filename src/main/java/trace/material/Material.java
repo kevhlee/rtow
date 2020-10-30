@@ -11,6 +11,6 @@ import trace.hittable.HitRecord;
  */
 public interface Material {
 
-    boolean scatter(Ray3 ray, HitRecord record, Vec3 attenuation);
+    boolean scatter(Ray3 ray, HitRecord rec, Vec3 attenuation);
 
 }
