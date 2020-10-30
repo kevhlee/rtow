@@ -9,9 +9,8 @@ import java.util.HashSet;
  *
  * @author Kevin Lee
  */
-public class HittableSet extends HashSet<Hittable> implements Hittable {
+public class Scene extends HashSet<Hittable> {
 
-    @Override
     public boolean hit(double tMin, double tMax, Ray3 ray, HitRecord record) {
         double tClosest = tMax;
         boolean hitAnything = false;

@@ -34,30 +34,28 @@ public class Sphere implements Hittable {
         if (discriminant > 0) {
             double root = Math.sqrt(discriminant);
 
-            if (isHit((-halfB - root) / a, tMin, tMax, ray, record)) {
-                return true;
+            double t0 = (-halfB - root) / a;
+            double t1 = (-halfB + root) / a;
+
+            if (t0 < tMax && t0 > tMin) {
+                return record.record(t0, tMin, tMax, ray, this);
             }
-            if (isHit((-halfB + root) / a, tMin, tMax, ray, record)) {
-                return true;
+            if (t1 < tMax && t1 > tMin) {
+                return record.record(t1, tMin, tMax, ray, this);
             }
         }
 
         return false;
     }
 
-    private boolean isHit(
-            double t, double tMin, double tMax, Ray3 ray, HitRecord record) {
+    @Override
+    public Vec3 getSurfaceNormal(Vec3 point) {
+        return point.sub(center).mul(1 / radius);
+    }
 
-        if (t >= tMax || t <= tMin) {
-            return false;
-        }
-
-        Vec3 point = ray.at(t);
-        Vec3 normal = point.sub(center).mul(1 / radius);
-
-        record.record(ray, t, point, normal, material);
-
-        return true;
+    @Override
+    public Material getMaterial() {
+        return material;
     }
 
 }

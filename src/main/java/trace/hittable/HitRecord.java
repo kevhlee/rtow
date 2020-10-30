@@ -37,14 +37,23 @@ public class HitRecord {
         return frontFace;
     }
 
-    public void record(
-            Ray3 ray, double t, Vec3 point, Vec3 normal, Material material) {
+    public boolean record(
+            double t, double tMin, double tMax, Ray3 ray, Hittable hittable) {
+
+        if (t <= tMin || t >= tMax) {
+            return false;
+        }
+
+        Vec3 point = ray.at(t);
+        Vec3 outwardNormal = hittable.getSurfaceNormal(point);
 
         this.t = t;
         this.point = point;
-        this.material = material;
-        this.frontFace = ray.getDirection().dot(normal) < 0.0;
-        this.normal = (frontFace) ? normal : normal.neg();
+        this.material = hittable.getMaterial();
+        this.frontFace = ray.getDirection().dot(outwardNormal) < 0.0;
+        this.normal = (frontFace) ? outwardNormal : outwardNormal.neg();
+
+        return true;
     }
 
 }

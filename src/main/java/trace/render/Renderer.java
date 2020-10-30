@@ -3,7 +3,7 @@ package trace.render;
 import trace.geometry.Ray3;
 import trace.geometry.Vec3;
 import trace.hittable.HitRecord;
-import trace.hittable.Hittable;
+import trace.hittable.Scene;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
@@ -66,7 +66,7 @@ public class Renderer {
         this.tMax = tMax;
     }
 
-    public RenderedImage render(Hittable world, int width, int height) {
+    public RenderedImage render(Scene scene, int width, int height) {
         BufferedImage bufferedImage =
                 new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -86,7 +86,7 @@ public class Renderer {
                     Ray3 ray = camera.buildRay(u, v);
 
                     pixel = pixel.add(
-                            rayColor(ray, world, record, 0));
+                            rayColor(ray, scene, record, 0));
                 }
 
                 bufferedImage.setRGB(x, height - (y + 1), toRGB(pixel));
@@ -99,17 +99,17 @@ public class Renderer {
     }
 
     private Vec3 rayColor(
-            Ray3 ray, Hittable world, HitRecord record, int depth) {
+            Ray3 ray, Scene scene, HitRecord record, int depth) {
 
         if (depth >= maxRayDepth) {
             return new Vec3(0, 0, 0);
         }
 
-        if (world.hit(tMin, tMax, ray, record)) {
+        if (scene.hit(tMin, tMax, ray, record)) {
             Vec3 attenuation = new Vec3(0, 0, 0);
 
             if (record.getMaterial().scatter(ray, record, attenuation)) {
-                return attenuation.mul(rayColor(ray, world, record, depth + 1));
+                return attenuation.mul(rayColor(ray, scene, record, depth + 1));
             }
 
             return new Vec3(0, 0, 0);
