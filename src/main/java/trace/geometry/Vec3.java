@@ -55,6 +55,16 @@ public class Vec3 {
         return v.sub(normal.mul(2 * v.dot(normal)));
     }
 
+    public static Vec3 refract(Vec3 uv, Vec3 normal, double refractRatio) {
+        double cosTheta = -uv.dot(normal);
+
+        Vec3 rOutPerp = uv.add(normal.mul(cosTheta)).mul(refractRatio);
+        Vec3 rOutParallel =
+                normal.mul(-Math.sqrt(Math.abs(1.0 - rOutPerp.lengthSq())));
+
+        return rOutPerp.add(rOutParallel);
+    }
+
     public Vec3(double x, double y, double z) {
         this.x = x;
         this.y = y;
