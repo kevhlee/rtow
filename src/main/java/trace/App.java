@@ -18,42 +18,73 @@ import java.io.IOException;
 
 public class App {
 
-    private static Hittable createWorld() {
+    private static Hittable randomScene() {
         HittableSet world = new HittableSet();
 
-        Material leftMat = new Dielectric(1.5);
-        Material rightMat = new Metal(new Vec3(0.8, 0.6, 0.2), 1.0);
-        Material groundMat = new Lambertian(new Vec3(0.8, 0.8, 0.0));
-        Material centerMat = new Lambertian(new Vec3(0.1, 0.2, 0.5));
+        Material groundMat = new Lambertian(new Vec3(0.5, 0.5, 0.5));
+        world.add(new Sphere(1000, new Vec3(0, -1000, 0), groundMat));
 
-        world.add(new Sphere(100.0, new Vec3(0.0, -100.5, -1.0), groundMat));
-        world.add(new Sphere(0.5, new Vec3(0.0, 0.0, -1.0), centerMat));
-        world.add(new Sphere(0.5, new Vec3(-1.0, 0.0, -1.0), leftMat));
-        world.add(new Sphere(-0.4, new Vec3(-1.0, 0.0, -1.0), leftMat));
-        world.add(new Sphere(0.5, new Vec3(1.0, 0.0, -1.0), rightMat));
+        for (int a = -11; a < 11; a++) {
+            for (int b = -11; b < 11; b++) {
+                Vec3 center = new Vec3(
+                        a + 0.9 * Math.random(),
+                        0.2,
+                        b + 0.9 * Math.random());
+
+                double chooseMat = Math.random();
+
+                if (center.sub(new Vec3(4, 0.2, 0)).length() > 0.9) {
+                    Material sphereMat;
+
+                    if (chooseMat < 0.8) {
+                        // Diffuse
+                        sphereMat = new Lambertian(Vec3.rand(0, 0.5));
+                    } else if (chooseMat < 0.95) {
+                        // Metal
+                        sphereMat =
+                                new Metal(Vec3.rand(0.5, 1), Math.random());
+                    } else {
+                        // Glass
+                        sphereMat = new Dielectric(1.5);
+                    }
+
+                    world.add(new Sphere(0.2, center, sphereMat));
+                }
+            }
+        }
+
+        Material mat1 = new Dielectric(1.5);
+        Material mat2 = new Lambertian(new Vec3(0.4, 0.2, 0.1));
+        Material mat3 = new Metal(new Vec3(0.7, 0.6, 0.5), 0.0);
+
+        world.add(new Sphere(1.0, new Vec3(0, 1, 0), mat1));
+        world.add(new Sphere(1.0, new Vec3(-4, 1, 0), mat2));
+        world.add(new Sphere(1.0, new Vec3(4, 1, 0), mat3));
 
         return world;
     }
 
     public static void main(String[] args) {
         // Image
-        int width = 400;
-        int height = 256;
+        int width = 1200;
+        int height = 800;
         double aspectRatio = (double) width / height;
 
         // Camera
-        Vec3 from = new Vec3(3, 3, 2);
-        Vec3 at = new Vec3(0, 0, -1);
+        Vec3 from = new Vec3(13, 2, 3);
+        Vec3 at = new Vec3(0, 0, 0);
         Vec3 up = new Vec3(0, 1, 0);
-        double distToFocus = from.sub(at).length();
 
-        Camera camera =
-                new Camera(from, at, up, 20, aspectRatio, 2.0, distToFocus);
+        Camera camera = new Camera(from, at, up, 20, aspectRatio, 0.1, 10);
 
         // Render
         Renderer renderer = new Renderer(camera);
+
+        renderer.setMaxRayDepth(50);
+        renderer.setNumberOfSamples(500);
+
         RenderedImage renderedImage =
-                renderer.render(createWorld(), width, height);
+                renderer.render(randomScene(), width, height);
 
         try {
             ImageIO.write(renderedImage, "png", new File("render.png"));
