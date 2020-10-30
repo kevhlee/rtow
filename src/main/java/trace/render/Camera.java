@@ -15,24 +15,32 @@ public class Camera {
     private final Vec3 vertical;
     private final Vec3 lowerLeftCorner;
 
-    public Camera(double aspectRatio) {
-        double viewportHeight = 2.0;
-        double viewportWidth = aspectRatio * viewportHeight;
-        double focalLength = 1.0;
+    public Camera(
+            Vec3 lookFrom, Vec3 lookAt, Vec3 up, double vfov,
+            double aspectRatio) {
 
-        this.origin = new Vec3(0, 0, 0);
-        this.horizontal = new Vec3(viewportWidth, 0, 0);
-        this.vertical = new Vec3(0, viewportHeight, 0);
+        double theta = Math.toRadians(vfov);
+        double h = Math.tan(theta / 2);
+        double viewportHeight = 2.0 * h;
+        double viewportWidth = aspectRatio * viewportHeight;
+
+        Vec3 w = lookFrom.sub(lookAt).unit();
+        Vec3 u = up.cross(w).unit();
+        Vec3 v = w.cross(u);
+
+        this.origin = lookFrom;
+        this.horizontal = u.mul(viewportWidth);
+        this.vertical = v.mul(viewportHeight);
 
         Vec3 lowerLeftCorner = origin.sub(horizontal.mul(0.5));
         lowerLeftCorner = lowerLeftCorner.sub(vertical.mul(0.5));
-        lowerLeftCorner = lowerLeftCorner.sub(new Vec3(0, 0, focalLength));
+        lowerLeftCorner = lowerLeftCorner.sub(w);
         this.lowerLeftCorner = lowerLeftCorner;
     }
 
-    public Ray3 buildRay(double u, double v) {
-        Vec3 direction = lowerLeftCorner.add(horizontal.mul(u));
-        direction = direction.add(vertical.mul(v));
+    public Ray3 buildRay(double s, double t) {
+        Vec3 direction = lowerLeftCorner.add(horizontal.mul(s));
+        direction = direction.add(vertical.mul(t));
         direction = direction.sub(origin);
 
         return new Ray3(origin, direction);

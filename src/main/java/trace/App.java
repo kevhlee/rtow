@@ -36,13 +36,21 @@ public class App {
     }
 
     public static void main(String[] args) {
+        // Image
         int width = 400;
         int height = 225;
+        double vfov = 20.0;
         double aspectRatio = (double) width / height;
 
-        Camera camera = new Camera(aspectRatio);
-        Renderer renderer = new Renderer(camera);
+        // Camera
+        Vec3 lookFrom = new Vec3(-2, 2, 1);
+        Vec3 lookAt = new Vec3(0, 0, -1);
+        Vec3 up = new Vec3(0, 1, 0);
 
+        Camera camera = new Camera(lookFrom, lookAt, up, vfov, aspectRatio);
+
+        // Render
+        Renderer renderer = new Renderer(camera);
         RenderedImage renderedImage =
                 renderer.render(createWorld(), width, height);
 
