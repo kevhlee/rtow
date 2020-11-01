@@ -9,7 +9,7 @@ import trace.hittable.HitRecord;
  *
  * @author Kevin Lee
  */
-public class Lambertian extends AbstractMaterial {
+public class Lambertian extends AlbedoMaterial {
 
     public Lambertian(Vec3 albedo) {
         super(albedo);
