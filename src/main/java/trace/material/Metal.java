@@ -9,7 +9,7 @@ import trace.hittable.HitRecord;
  *
  * @author Kevin Lee
  */
-public class Metal extends AbstractMaterial {
+public class Metal extends Reflective {
 
     private final double fuzz;
 
@@ -21,24 +21,19 @@ public class Metal extends AbstractMaterial {
 
     @Override
     public boolean scatter(Ray3 ray, HitRecord rec, Vec3 attenuation) {
-        Vec3 normal = rec.getNormal();
-        Vec3 reflectDir = Vec3.reflect(ray.getDirection().unit(), normal);
-
-        if (reflectDir.dot(normal) > 0) {
-            ray.setOrigin(rec.getPoint());
-            ray.setDirection(
-                    reflectDir.add(Vec3.randUnitSphere().mul(fuzz)));
-
-            Vec3 albedo = getAlbedo();
-
-            attenuation.setX(albedo.getX());
-            attenuation.setY(albedo.getY());
-            attenuation.setZ(albedo.getZ());
+        if (super.scatter(ray, rec, attenuation)) {
+            if (fuzz > 0.0) {
+                ray.setDirection(ray.getDirection().add(fuzzVector()));
+            }
 
             return true;
         }
 
         return false;
+    }
+
+    private Vec3 fuzzVector() {
+        return Vec3.randUnitSphere().mul(fuzz);
     }
 
 }
