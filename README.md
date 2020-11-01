@@ -18,3 +18,9 @@ Run the following commands in the terminal:
 $ ./gradlew build
 $ ./gradlew run
 ```
+
+## Resources Used
+
+- [Ray Tracing in One Weekend (Peter Shirley)](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+- [Ray Tracing: Rendering a Triangle (Scratchapixel)](https://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle)
+- [Ray-Plane and Ray-Disk Intersection (Scratchapixel)](https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-plane-and-ray-disk-intersection)
