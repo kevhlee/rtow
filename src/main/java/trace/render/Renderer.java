@@ -3,6 +3,7 @@ package trace.render;
 import trace.geometry.Ray3;
 import trace.geometry.Vec3;
 import trace.hittable.HitRecord;
+import trace.material.Material;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
@@ -14,58 +15,54 @@ import java.awt.image.RenderedImage;
  */
 public class Renderer {
 
-    public static final double DEFAULT_T_MIN = 0.001;
-    public static final double DEFAULT_T_MAX = Double.MAX_VALUE;
-    public static final int DEFAULT_MAX_RAY_DEPTH = 50;
-    public static final int DEFAULT_NUMBER_OF_SAMPLES = 100;
+    public static class Builder {
 
-    private final Camera camera;
+        protected double tMax;
+        protected double tMin;
+
+        protected int maxRayDepth;
+        protected int numberOfSamples;
+
+        public Builder setMinT(double tMin) {
+            this.tMin = tMin;
+            return this;
+        }
+
+        public Builder setMaxT(double tMax) {
+            this.tMax = tMax;
+            return this;
+        }
+
+        public Builder setMaxRayDepth(int maxRayDepth) {
+            this.maxRayDepth = maxRayDepth;
+            return this;
+        }
+
+        public Builder setNumberOfSamples(int numberOfSamples) {
+            this.numberOfSamples = numberOfSamples;
+            return this;
+        }
+
+        public Renderer build() {
+            return new Renderer(this);
+        }
+
+    }
+
     private double tMin;
     private double tMax;
+
     private int maxRayDepth;
     private int numberOfSamples;
 
-    public Renderer(Camera camera) {
-        this.camera = camera;
-        this.tMin = DEFAULT_T_MIN;
-        this.tMax = DEFAULT_T_MAX;
-        this.maxRayDepth = DEFAULT_MAX_RAY_DEPTH;
-        this.numberOfSamples = DEFAULT_NUMBER_OF_SAMPLES;
+    public Renderer(Builder builder) {
+        this.tMin = builder.tMin;
+        this.tMax = builder.tMax;
+        this.maxRayDepth = builder.maxRayDepth;
+        this.numberOfSamples = builder.numberOfSamples;
     }
 
-    public int getMaxRayDepth() {
-        return maxRayDepth;
-    }
-
-    public int getNumberOfSamples() {
-        return numberOfSamples;
-    }
-
-    public double getMinT() {
-        return tMin;
-    }
-
-    public double getMaxT() {
-        return tMax;
-    }
-
-    public void setNumberOfSamples(int numberOfSamples) {
-        this.numberOfSamples = numberOfSamples;
-    }
-
-    public void setMaxRayDepth(int maxRayDepth) {
-        this.maxRayDepth = maxRayDepth;
-    }
-
-    public void setMinT(double tMin) {
-        this.tMin = tMin;
-    }
-
-    public void setMaxT(double tMax) {
-        this.tMax = tMax;
-    }
-
-    public RenderedImage render(Scene scene, int width, int height) {
+    public RenderedImage render(Scene scene, Camera camera, int width, int height) {
         BufferedImage bufferedImage =
                 new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -84,8 +81,7 @@ public class Renderer {
 
                     Ray3 ray = camera.buildRay(u, v);
 
-                    pixel = pixel.add(
-                            rayColor(ray, scene, record, 0));
+                    pixel = pixel.add(trace(ray, scene, record, 0));
                 }
 
                 bufferedImage.setRGB(x, height - (y + 1), toRGB(pixel));
@@ -97,7 +93,7 @@ public class Renderer {
         return bufferedImage;
     }
 
-    private Vec3 rayColor(
+    private Vec3 trace(
             Ray3 ray, Scene scene, HitRecord record, int depth) {
 
         if (depth >= maxRayDepth) {
@@ -106,9 +102,10 @@ public class Renderer {
 
         if (scene.hit(tMin, tMax, ray, record)) {
             Vec3 attenuation = new Vec3(0, 0, 0);
+            Material material = record.getMaterial();
 
-            if (record.getMaterial().scatter(ray, record, attenuation)) {
-                return attenuation.mul(rayColor(ray, scene, record, depth + 1));
+            if (material.scatter(ray, record, attenuation)) {
+                return attenuation.mul(trace(ray, scene, record, depth + 1));
             }
 
             return new Vec3(0, 0, 0);
