@@ -99,8 +99,8 @@ public class Vec3Test {
 
     @Test
     public void testMul() {
-        Vec3 actual = v.sub(w);
-        Vec3 expected = new Vec3(2, 2, 2);
+        Vec3 actual = v.mul(w);
+        Vec3 expected = new Vec3(-1, 0, 3);
 
         Vec3Assertions.assertEqualVec(expected, actual, EPSILON);
     }
