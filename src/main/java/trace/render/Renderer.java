@@ -81,7 +81,7 @@ public class Renderer {
 
                     Ray3 ray = camera.buildRay(u, v);
 
-                    pixel = pixel.add(trace(ray, scene, record, 0));
+                    pixel.addInPlace(trace(ray, scene, record, 0));
                 }
 
                 bufferedImage.setRGB(x, height - (y + 1), toRGB(pixel));
@@ -118,10 +118,9 @@ public class Renderer {
         Vec3 unitDir = ray.getDirection().unit();
         double t = 0.5 * (unitDir.getY() + 1.0);
 
-        Vec3 background = new Vec3(1.0, 1.0, 1.0).mul(1.0 - t);
-        background = background.add(new Vec3(0.5, 0.7, 1.0).mul(t));
-
-        return background;
+        return new Vec3(1.0, 1.0, 1.0)
+                .mul(1.0 - t)
+                .add(new Vec3(0.5, 0.7, 1.0).mul(t));
     }
 
     private int toRGB(Vec3 color) {
