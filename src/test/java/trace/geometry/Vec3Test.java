@@ -106,6 +106,30 @@ public class Vec3Test {
     }
 
     @Test
+    public void testAddInPlace() {
+        v.addInPlace(w);
+        Vec3 expected = new Vec3(0, 2, 4);
+
+        Vec3Assertions.assertEqualVec(v, expected, EPSILON);
+    }
+
+    @Test
+    public void testSubInPlace() {
+        v.subInPlace(w);
+        Vec3 expected = new Vec3(2, 2, 2);
+
+        Vec3Assertions.assertEqualVec(v, expected, EPSILON);
+    }
+
+    @Test
+    public void testMulInPlace() {
+        v.mulInPlace(w);
+        Vec3 expected = new Vec3(-1, 0, 3);
+
+        Vec3Assertions.assertEqualVec(v, expected, EPSILON);
+    }
+
+    @Test
     public void testDot() {
         double actual = v.dot(w);
         double expected = 2;
