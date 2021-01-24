@@ -130,22 +130,28 @@ public class Vec3 {
         return new Vec3(x * other.x, y * other.y, z * other.z);
     }
 
-    public void addInPlace(Vec3 other) {
+    public Vec3 addInPlace(Vec3 other) {
         this.x += other.x;
         this.y += other.y;
         this.z += other.z;
+
+        return this;
     }
 
-    public void subInPlace(Vec3 other) {
+    public Vec3 subInPlace(Vec3 other) {
         this.x -= other.x;
         this.y -= other.y;
         this.z -= other.z;
+
+        return this;
     }
 
-    public void mulInPlace(double scalar) {
+    public Vec3 mulInPlace(double scalar) {
         this.x += scalar;
         this.y += scalar;
         this.z += scalar;
+
+        return this;
     }
 
     public void mulInPlace(Vec3 other) {
