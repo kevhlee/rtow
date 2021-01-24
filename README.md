@@ -7,8 +7,9 @@ Implementation of "Ray Tracing in One Weekend" written in Java.
 ## Description
 
 This project implements Peter Shirley's [*Ray Tracing in One Weekend*](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
-using the Java programming language. The project definitely has room for optimization, both in terms of performance and
-refactoring.
+using the Java programming language.
+
+The project definitely has room for optimization, both in terms of performance and refactoring.
 
 ## Usage
 
