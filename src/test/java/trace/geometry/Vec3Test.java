@@ -106,6 +106,14 @@ public class Vec3Test {
     }
 
     @Test
+    public void testMulScalar() {
+        Vec3 actual = v.mul(3.0);
+        Vec3 expected = new Vec3(3, 6, 9);
+
+        Vec3Assertions.assertEqualVec(expected, actual, EPSILON);
+    }
+
+    @Test
     public void testAddInPlace() {
         v.addInPlace(w);
         Vec3 expected = new Vec3(0, 2, 4);
@@ -125,6 +133,14 @@ public class Vec3Test {
     public void testMulInPlace() {
         v.mulInPlace(w);
         Vec3 expected = new Vec3(-1, 0, 3);
+
+        Vec3Assertions.assertEqualVec(v, expected, EPSILON);
+    }
+
+    @Test
+    public void testMulInScalar() {
+        v.mulInPlace(3.0);
+        Vec3 expected = new Vec3(3, 6, 9);
 
         Vec3Assertions.assertEqualVec(v, expected, EPSILON);
     }

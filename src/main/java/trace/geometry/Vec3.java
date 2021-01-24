@@ -147,9 +147,9 @@ public class Vec3 {
     }
 
     public Vec3 mulInPlace(double scalar) {
-        this.x += scalar;
-        this.y += scalar;
-        this.z += scalar;
+        this.x *= scalar;
+        this.y *= scalar;
+        this.z *= scalar;
 
         return this;
     }
