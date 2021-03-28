@@ -20,10 +20,7 @@ public class App {
 
         for (int a = -11; a < 11; a++) {
             for (int b = -11; b < 11; b++) {
-                Vec3 center = new Vec3(
-                        a + 0.9 * Math.random(),
-                        0.2,
-                        b + 0.9 * Math.random());
+                Vec3 center = new Vec3(a + 0.9 * Math.random(), 0.2, b + 0.9 * Math.random());
 
                 double matChoose = Math.random();
 
@@ -35,8 +32,7 @@ public class App {
                         sphereMat = new Lambertian(Vec3.rand(0, 0.5));
                     } else if (matChoose < 0.95) {
                         // Metal
-                        sphereMat =
-                                new Metal(Vec3.rand(0.5, 1), Math.random());
+                        sphereMat = new Metal(Vec3.rand(0.5, 1), Math.random());
                     } else {
                         // Glass
                         sphereMat = new Dielectric(1.5);
@@ -61,28 +57,37 @@ public class App {
     }
 
     public static void main(String[] args) {
+        // Renderer
         int width = 600;
         int height = 400;
+        int maxRayDepth = 30;
+        int numberOfSamples = 50;
+        double tMin = 0.001;
+        double tMax = Double.MAX_VALUE;
 
-        Camera camera = new Camera.Builder()
-                .setLookFrom(new Vec3(13, 2, 3))
-                .setLookAt(new Vec3(0, 0, 0))
-                .setLookUp(new Vec3(0, 1, 0))
-                .setAperture(0.1)
-                .setAspectRatio((double) width / height)
-                .setFieldOfView(20)
-                .setFocusDistance(10)
+        // Camera
+        double aperture = 0.1;
+        double aspectRatio = (double) width / height;
+        double fieldOfView = 20;
+        double focusDistance = 10;
+
+        Vec3 lookFrom = new Vec3(13, 2, 3);
+        Vec3 lookAt = new Vec3(0, 0, 0);
+        Vec3 lookUp = new Vec3(0, 1, 0);
+
+        Camera camera = new Camera.Builder(lookFrom, lookAt, lookUp)
+                .setAperture(aperture)
+                .setAspectRatio(aspectRatio)
+                .setFieldOfView(fieldOfView)
+                .setFocusDistance(focusDistance)
                 .build();
 
-        Renderer renderer = new Renderer.Builder()
-                .setMinT(0.001)
-                .setMaxT(Double.MAX_VALUE)
-                .setMaxRayDepth(30)
-                .setNumberOfSamples(50)
+        Renderer renderer = new Renderer.Builder(tMin, tMax)
+                .setMaxRayDepth(maxRayDepth)
+                .setNumberOfSamples(numberOfSamples)
                 .build();
 
-        RenderedImage renderedImage =
-                renderer.render(randomScene(), camera, width, height);
+        RenderedImage renderedImage = renderer.render(randomScene(), camera, width, height);
 
         try {
             ImageIO.write(renderedImage, "png", new File("render.png"));

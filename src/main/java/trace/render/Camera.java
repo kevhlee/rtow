@@ -12,28 +12,19 @@ public class Camera {
 
     public static class Builder {
 
-        private Vec3 lookAt;
-        private Vec3 lookUp;
-        private Vec3 lookFrom;
+        private final Vec3 lookAt;
+        private final Vec3 lookUp;
+        private final Vec3 lookFrom;
 
         private double aperture;
         private double aspectRatio;
         private double fieldOfView;
         private double focusDistance;
 
-        public Builder setLookAt(Vec3 lookAt) {
-            this.lookAt = lookAt;
-            return this;
-        }
-
-        public Builder setLookUp(Vec3 lookUp) {
-            this.lookUp = lookUp;
-            return this;
-        }
-
-        public Builder setLookFrom(Vec3 lookFrom) {
+        public Builder(Vec3 lookFrom, Vec3 lookAt, Vec3 lookUp) {
             this.lookFrom = lookFrom;
-            return this;
+            this.lookAt = lookAt;
+            this.lookUp = lookUp;
         }
 
         public Builder setAperture(double aperture) {
@@ -95,8 +86,7 @@ public class Camera {
         Vec3 rd = Vec3.randUnitDisk().mul(lensRadius);
         Vec3 offset = u.mul(rd.getX()).add(v.mul(rd.getY()));
 
-        Vec3 direction =
-            lowerLeftCorner.add(horizontal.mul(s))
+        Vec3 direction = lowerLeftCorner.add(horizontal.mul(s))
                 .add(vertical.mul(t))
                 .sub(origin)
                 .sub(offset);

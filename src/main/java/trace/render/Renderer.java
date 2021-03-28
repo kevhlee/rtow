@@ -17,11 +17,16 @@ public class Renderer {
 
     public static class Builder {
 
-        protected double tMax;
-        protected double tMin;
+        private double tMax;
+        private double tMin;
 
-        protected int maxRayDepth;
-        protected int numberOfSamples;
+        private int maxRayDepth;
+        private int numberOfSamples;
+
+        public Builder(double tMin, double tMax) {
+            this.tMax = tMax;
+            this.tMin = tMin;
+        }
 
         public Builder setMinT(double tMin) {
             this.tMin = tMin;
@@ -62,7 +67,9 @@ public class Renderer {
         this.numberOfSamples = builder.numberOfSamples;
     }
 
-    public RenderedImage render(Scene scene, Camera camera, int width, int height) {
+    public RenderedImage render(
+        Scene scene, Camera camera, int width, int height) {
+
         BufferedImage bufferedImage =
                 new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
@@ -70,7 +77,7 @@ public class Renderer {
 
         for (int y = 0; y < height; y++) {
             System.out.print(
-                    "\rScanlines remaining: " + (height - y - 1) + " \b");
+                "\rScanlines remaining: " + (height - y - 1) + " \b");
 
             for (int x = 0; x < width; x++) {
                 Vec3 pixel = new Vec3(0, 0, 0);
@@ -93,8 +100,7 @@ public class Renderer {
         return bufferedImage;
     }
 
-    private Vec3 trace(
-            Ray3 ray, Scene scene, HitRecord record, int depth) {
+    private Vec3 trace(Ray3 ray, Scene scene, HitRecord record, int depth) {
 
         if (depth >= maxRayDepth) {
             return new Vec3(0, 0, 0);
@@ -120,7 +126,8 @@ public class Renderer {
 
         return new Vec3(1.0, 1.0, 1.0)
                 .mul(1.0 - t)
-                .add(new Vec3(0.5, 0.7, 1.0).mul(t));
+                .add(new Vec3(0.5, 0.7, 1.0)
+                .mul(t));
     }
 
     private int toRGB(Vec3 color) {
