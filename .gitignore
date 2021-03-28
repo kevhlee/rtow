@@ -3,6 +3,9 @@
 
 # Java
 *.class
+.classpath
+.project
+.settings
 
 # IntelliJ
 .idea
