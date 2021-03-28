@@ -61,8 +61,8 @@ public class App {
     }
 
     public static void main(String[] args) {
-        int width = 1200;
-        int height = 800;
+        int width = 600;
+        int height = 400;
 
         Camera camera = new Camera.Builder()
                 .setLookFrom(new Vec3(13, 2, 3))
@@ -77,8 +77,8 @@ public class App {
         Renderer renderer = new Renderer.Builder()
                 .setMinT(0.001)
                 .setMaxT(Double.MAX_VALUE)
-                .setMaxRayDepth(50)
-                .setNumberOfSamples(100)
+                .setMaxRayDepth(30)
+                .setNumberOfSamples(50)
                 .build();
 
         RenderedImage renderedImage =
