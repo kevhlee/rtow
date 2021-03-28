@@ -13,7 +13,7 @@ import java.util.Set;
  *
  * @author Kevin Lee
  */
-public class Scene extends HashSet<Hittable> implements Iterable<Hittable> {
+public class Scene implements Iterable<Hittable> {
 
     private final Set<Hittable> hittables;
 

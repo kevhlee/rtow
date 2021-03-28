@@ -3,8 +3,6 @@ package trace.render;
 import trace.geometry.Ray3;
 import trace.geometry.Vec3;
 
-import java.awt.image.BufferedImage;
-
 /**
  * A 3D camera for rendering scenes.
  *
@@ -86,8 +84,7 @@ public class Camera {
         origin = builder.lookFrom;
         vertical = v.mul(viewportHeight * builder.focusDistance);
         horizontal = u.mul(viewportWidth * builder.focusDistance);
-        lowerLeftCorner = origin
-                .sub(horizontal.mul(0.5))
+        lowerLeftCorner = origin.sub(horizontal.mul(0.5))
                 .sub(vertical.mul(0.5))
                 .sub(w.mul(builder.focusDistance));
 
@@ -98,8 +95,8 @@ public class Camera {
         Vec3 rd = Vec3.randUnitDisk().mul(lensRadius);
         Vec3 offset = u.mul(rd.getX()).add(v.mul(rd.getY()));
 
-        Vec3 direction = lowerLeftCorner
-                .add(horizontal.mul(s))
+        Vec3 direction =
+            lowerLeftCorner.add(horizontal.mul(s))
                 .add(vertical.mul(t))
                 .sub(origin)
                 .sub(offset);
