@@ -17,8 +17,8 @@ public class Renderer {
 
     public static class Builder {
 
-        private double tMax;
-        private double tMin;
+        private final double tMax;
+        private final double tMin;
 
         private int maxRayDepth;
         private int numberOfSamples;
@@ -26,16 +26,6 @@ public class Renderer {
         public Builder(double tMin, double tMax) {
             this.tMax = tMax;
             this.tMin = tMin;
-        }
-
-        public Builder setMinT(double tMin) {
-            this.tMin = tMin;
-            return this;
-        }
-
-        public Builder setMaxT(double tMax) {
-            this.tMax = tMax;
-            return this;
         }
 
         public Builder setMaxRayDepth(int maxRayDepth) {
@@ -54,11 +44,11 @@ public class Renderer {
 
     }
 
-    private double tMin;
-    private double tMax;
+    private final double tMin;
+    private final double tMax;
 
-    private int maxRayDepth;
-    private int numberOfSamples;
+    private final int maxRayDepth;
+    private final int numberOfSamples;
 
     public Renderer(Builder builder) {
         this.tMin = builder.tMin;
@@ -101,7 +91,6 @@ public class Renderer {
     }
 
     private Vec3 trace(Ray3 ray, Scene scene, HitRecord record, int depth) {
-
         if (depth >= maxRayDepth) {
             return new Vec3(0, 0, 0);
         }
