@@ -18,21 +18,27 @@ public class WeekendTracer {
     private static Scene randomScene() {
         Scene scene = new Scene();
 
+        // Generate foreground
         for (int a = -11; a < 11; a++) {
             for (int b = -11; b < 11; b++) {
-                Vec3 center = new Vec3(a + 0.9 * Math.random(), 0.2, b + 0.9 * Math.random());
+                double x = a + 0.9 * Math.random();
+                double y = 0.2;
+                double z = b + 0.9 * Math.random();
 
-                double matChoose = Math.random();
+                Vec3 center = new Vec3(x, y, z);
 
                 if (center.sub(new Vec3(4, 0.2, 0)).length() > 0.9) {
                     Material sphereMat;
+
+                    double matChoose = Math.random();
 
                     if (matChoose < 0.8) {
                         // Diffuse
                         sphereMat = new Lambertian(Vec3.rand(0, 0.5));
                     } else if (matChoose < 0.95) {
                         // Metal
-                        sphereMat = new Metal(Vec3.rand(0.5, 1), Math.random());
+                        sphereMat =
+                                new Metal(Vec3.rand(0.5, 1), Math.random());
                     } else {
                         // Glass
                         sphereMat = new Dielectric(1.5);
@@ -43,6 +49,7 @@ public class WeekendTracer {
             }
         }
 
+        // Generate background
         Material mat1 = new Dielectric(1.5);
         Material mat2 = new Lambertian(new Vec3(0.4, 0.2, 0.1));
         Material mat3 = new Metal(new Vec3(0.7, 0.6, 0.5), 0.0);
@@ -87,7 +94,8 @@ public class WeekendTracer {
                 .setNumberOfSamples(numberOfSamples)
                 .build();
 
-        RenderedImage renderedImage = renderer.render(randomScene(), camera, width, height);
+        RenderedImage renderedImage =
+                renderer.render(randomScene(), camera, width, height);
 
         try {
             ImageIO.write(renderedImage, "png", new File("render.png"));

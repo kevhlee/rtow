@@ -9,7 +9,7 @@ import trace.hittable.HitRecord;
  *
  * @author Kevin Lee
  */
-public class Reflective extends AlbedoMaterial {
+public class Reflective extends Albedo {
 
     public Reflective(Vec3 albedo) {
         super(albedo);

@@ -7,11 +7,11 @@ import trace.geometry.Vec3;
  *
  * @author Kevin Lee
  */
-public abstract class AlbedoMaterial implements Material {
+public abstract class Albedo implements Material {
 
     private final Vec3 albedo;
 
-    public AlbedoMaterial(Vec3 albedo) {
+    public Albedo(Vec3 albedo) {
         this.albedo = albedo;
     }
 
