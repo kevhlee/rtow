@@ -2,7 +2,7 @@
 
 Implementation of "Ray Tracing in One Weekend" written in Java.
 
-![cover](assets/cover.jpg)
+![cover](https://user-images.githubusercontent.com/21070577/120865849-a8c69780-c543-11eb-92f0-56a78e979816.jpg)
 
 ## Description
 
