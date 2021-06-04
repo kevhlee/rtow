@@ -13,7 +13,7 @@ import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class App {
+public class WeekendTracer {
 
     private static Scene randomScene() {
         Scene scene = new Scene();
