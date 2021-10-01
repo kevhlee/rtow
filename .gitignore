@@ -3,20 +3,25 @@
 
 # Java
 *.class
+bin/
+out/
+target/
+
+# Eclipse
 .classpath
 .project
-.settings
+.settings/
 
 # IntelliJ
-.idea
 *.iml
+.idea/
 
 # Visual Studio Code
-.vscode
+.vscode/
 
 # Gradle
-.gradle
-build
+build/
+.gradle/
 
 # Output images
 *.png
