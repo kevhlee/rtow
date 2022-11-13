@@ -1,6 +1,6 @@
-package trace.material;
+package com.khl.trace.material;
 
-import trace.geometry.Vec3;
+import com.khl.trace.geometry.Vec3;
 
 /**
  * A purely reflective surface material.

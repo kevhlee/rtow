@@ -1,8 +1,8 @@
-package trace.material;
+package com.khl.trace.material;
 
-import trace.geometry.Ray3;
-import trace.geometry.Vec3;
-import trace.hittable.HitRecord;
+import com.khl.trace.geometry.Ray3;
+import com.khl.trace.geometry.Vec3;
+import com.khl.trace.hittable.HitRecord;
 
 /**
  * A reflective surface material.

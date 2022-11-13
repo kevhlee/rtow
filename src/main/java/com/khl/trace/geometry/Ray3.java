@@ -1,4 +1,4 @@
-package trace.geometry;
+package com.khl.trace.geometry;
 
 /**
  * A 3D ray.

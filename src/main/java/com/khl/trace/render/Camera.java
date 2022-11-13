@@ -1,7 +1,7 @@
-package trace.render;
+package com.khl.trace.render;
 
-import trace.geometry.Ray3;
-import trace.geometry.Vec3;
+import com.khl.trace.geometry.Ray3;
+import com.khl.trace.geometry.Vec3;
 
 /**
  * A 3D camera for rendering scenes.
@@ -86,10 +86,8 @@ public class Camera {
         Vec3 rd = Vec3.randUnitDisk().mul(lensRadius);
         Vec3 offset = u.mul(rd.getX()).add(v.mul(rd.getY()));
 
-        Vec3 direction = lowerLeftCorner.add(horizontal.mul(s))
-                .add(vertical.mul(t))
-                .sub(origin)
-                .sub(offset);
+        Vec3 direction =
+                lowerLeftCorner.add(horizontal.mul(s)).add(vertical.mul(t)).sub(origin).sub(offset);
 
         return new Ray3(origin.add(offset), direction);
     }

@@ -1,4 +1,4 @@
-package trace.geometry;
+package com.khl.trace.geometry;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -44,22 +44,18 @@ public class Ray3Test {
     public void testAt() {
         Vec3 actual = ray.at(0);
         Vec3 expected = ray.getOrigin();
-
         Vec3Assertions.assertEqualVec(expected, actual, EPSILON);
 
         actual = ray.at(2);
         expected = new Vec3(2, -2, 3);
-
         Vec3Assertions.assertEqualVec(expected, actual, EPSILON);
 
         actual = ray.at(-1.5);
         expected = new Vec3(0.25, 1.5, -4);
-
         Vec3Assertions.assertEqualVec(expected, actual, EPSILON);
 
         actual = ray.at(0.65);
         expected = new Vec3(1.325, -0.65, 0.3);
-
         Vec3Assertions.assertEqualVec(expected, actual, EPSILON);
     }
 

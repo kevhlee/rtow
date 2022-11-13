@@ -1,4 +1,4 @@
-package trace.geometry;
+package com.khl.trace.geometry;
 
 /**
  * A 3D vector.
@@ -70,8 +70,7 @@ public class Vec3 {
         double cosTheta = -uv.dot(normal);
 
         Vec3 rOutPerp = uv.add(normal.mul(cosTheta)).mul(refractRatio);
-        Vec3 rOutParallel =
-                normal.mul(-Math.sqrt(Math.abs(1.0 - rOutPerp.lengthSq())));
+        Vec3 rOutParallel = normal.mul(-Math.sqrt(Math.abs(1.0 - rOutPerp.lengthSq())));
 
         return rOutPerp.add(rOutParallel);
     }
@@ -92,6 +91,12 @@ public class Vec3 {
 
     public double getZ() {
         return z;
+    }
+
+    public void set(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
     }
 
     public void setX(double x) {
@@ -168,8 +173,7 @@ public class Vec3 {
         return new Vec3(
                 (y * other.z) - (z * other.y),
                 (z * other.x) - (x * other.z),
-                (x * other.y) - (y * other.x)
-        );
+                (x * other.y) - (y * other.x));
     }
 
     public double length() {

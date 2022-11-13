@@ -1,6 +1,6 @@
-package trace.hittable;
+package com.khl.trace.hittable;
 
-import trace.material.Material;
+import com.khl.trace.material.Material;
 
 /**
  * An abstract base class for hittable objects.

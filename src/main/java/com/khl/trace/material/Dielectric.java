@@ -1,8 +1,8 @@
-package trace.material;
+package com.khl.trace.material;
 
-import trace.geometry.Ray3;
-import trace.geometry.Vec3;
-import trace.hittable.HitRecord;
+import com.khl.trace.geometry.Ray3;
+import com.khl.trace.geometry.Vec3;
+import com.khl.trace.hittable.HitRecord;
 
 /**
  * A dielectric/transparent surface material.
@@ -32,9 +32,7 @@ public class Dielectric implements Material {
 
         Vec3 direction;
 
-        if (refractRatio * sinTheta > 1.0 ||
-                reflectance(cosTheta, refractRatio) > Math.random()) {
-
+        if (refractRatio * sinTheta > 1.0 || reflectance(cosTheta, refractRatio) > Math.random()) {
             direction = Vec3.reflect(unitDir, normal);
         } else {
             direction = Vec3.refract(unitDir, normal, refractRatio);

@@ -1,8 +1,8 @@
-package trace.hittable;
+package com.khl.trace.hittable;
 
-import trace.geometry.Ray3;
-import trace.geometry.Vec3;
-import trace.material.Material;
+import com.khl.trace.geometry.Ray3;
+import com.khl.trace.geometry.Vec3;
+import com.khl.trace.material.Material;
 
 /**
  * A hittable 3D plane.
@@ -24,13 +24,10 @@ public class Plane extends AbstractHittable {
     @Override
     public boolean hit(double tMin, double tMax, Ray3 ray, HitRecord rec) {
         double d = normal.dot(ray.getDirection());
-
         if (d > 1e-6) {
             double t = origin.sub(ray.getOrigin()).dot(normal) / d;
-
             return rec.record(t, tMin, tMax, ray, this);
         }
-
         return false;
     }
 

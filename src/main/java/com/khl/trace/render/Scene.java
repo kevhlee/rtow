@@ -1,8 +1,8 @@
-package trace.render;
+package com.khl.trace.render;
 
-import trace.geometry.Ray3;
-import trace.hittable.HitRecord;
-import trace.hittable.Hittable;
+import com.khl.trace.geometry.Ray3;
+import com.khl.trace.hittable.HitRecord;
+import com.khl.trace.hittable.Hittable;
 
 import java.util.HashSet;
 import java.util.Iterator;

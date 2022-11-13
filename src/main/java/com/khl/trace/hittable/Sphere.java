@@ -1,8 +1,8 @@
-package trace.hittable;
+package com.khl.trace.hittable;
 
-import trace.geometry.Ray3;
-import trace.geometry.Vec3;
-import trace.material.Material;
+import com.khl.trace.geometry.Ray3;
+import com.khl.trace.geometry.Vec3;
+import com.khl.trace.material.Material;
 
 /**
  * A hittable sphere.
@@ -16,7 +16,6 @@ public class Sphere extends AbstractHittable {
 
     public Sphere(double radius, Vec3 center, Material material) {
         super(material);
-
         this.center = center;
         this.radius = radius;
     }
@@ -33,7 +32,6 @@ public class Sphere extends AbstractHittable {
 
         if (discriminant > 0) {
             double root = Math.sqrt(discriminant);
-
             double t0 = (-halfB - root) / a;
             double t1 = (-halfB + root) / a;
 

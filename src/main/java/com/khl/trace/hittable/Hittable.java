@@ -1,8 +1,8 @@
-package trace.hittable;
+package com.khl.trace.hittable;
 
-import trace.geometry.Ray3;
-import trace.geometry.Vec3;
-import trace.material.Material;
+import com.khl.trace.geometry.Ray3;
+import com.khl.trace.geometry.Vec3;
+import com.khl.trace.material.Material;
 
 /**
  * An interface for ray-hittable objects.

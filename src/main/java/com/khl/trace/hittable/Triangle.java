@@ -1,12 +1,12 @@
-package trace.hittable;
+package com.khl.trace.hittable;
 
-import trace.geometry.Ray3;
-import trace.geometry.Vec3;
-import trace.material.Material;
+import com.khl.trace.geometry.Ray3;
+import com.khl.trace.geometry.Vec3;
+import com.khl.trace.material.Material;
 
 /**
  * A hittable triangle in 3D space.
- *
+ * <p>
  * Note that the coordinates of the triangle's vertices should be
  * specified in counter-clockwise fashion. This implementation also
  * allows the user to enable backface culling.
@@ -24,11 +24,8 @@ public class Triangle extends AbstractHittable {
         this(v0, v1, v2, true, material);
     }
 
-    public Triangle(
-            Vec3 v0, Vec3 v1, Vec3 v2, boolean cull, Material material) {
-
+    public Triangle(Vec3 v0, Vec3 v1, Vec3 v2, boolean cull, Material material) {
         super(material);
-
         this.v0 = v0;
         this.v1 = v1;
         this.v2 = v2;

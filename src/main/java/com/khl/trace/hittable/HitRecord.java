@@ -1,8 +1,8 @@
-package trace.hittable;
+package com.khl.trace.hittable;
 
-import trace.geometry.Ray3;
-import trace.geometry.Vec3;
-import trace.material.Material;
+import com.khl.trace.geometry.Ray3;
+import com.khl.trace.geometry.Vec3;
+import com.khl.trace.material.Material;
 
 /**
  * A class used for storing information about ray-intersections.
@@ -37,9 +37,7 @@ public class HitRecord {
         return frontFace;
     }
 
-    public boolean record(
-            double t, double tMin, double tMax, Ray3 ray, Hittable hittable) {
-
+    public boolean record(double t, double tMin, double tMax, Ray3 ray, Hittable hittable) {
         if (t <= tMin || t >= tMax) {
             return false;
         }
