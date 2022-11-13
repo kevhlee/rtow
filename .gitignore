@@ -1,27 +1,26 @@
-# MacOS
-.DS_Store
+# Output images
+*.png
 
 # Java
 *.class
-bin/
-out/
-target/
+*.jar
+
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
 
 # Eclipse
+.settings/
 .classpath
 .project
-.settings/
 
 # IntelliJ
-*.iml
 .idea/
+*.iml
 
 # Visual Studio Code
 .vscode/
 
-# Gradle
-build/
-.gradle/
-
-# Output images
-*.png
+# OS-specific
+.DS_Store
