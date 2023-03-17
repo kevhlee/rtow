@@ -9,7 +9,7 @@ import com.khl.trace.material.Material;
  *
  * @author Kevin Lee
  */
-public class Sphere extends AbstractHittable {
+public class Sphere extends BaseHittable {
 
     private final Vec3 center;
     private final double radius;
@@ -42,7 +42,6 @@ public class Sphere extends AbstractHittable {
                 return rec.record(t1, tMin, tMax, ray, this);
             }
         }
-
         return false;
     }
 

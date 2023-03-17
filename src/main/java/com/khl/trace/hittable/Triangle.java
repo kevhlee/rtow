@@ -13,7 +13,7 @@ import com.khl.trace.material.Material;
  *
  * @author Kevin Lee
  */
-public class Triangle extends AbstractHittable {
+public class Triangle extends BaseHittable {
 
     private final Vec3 v0;
     private final Vec3 v1;
@@ -24,7 +24,9 @@ public class Triangle extends AbstractHittable {
         this(v0, v1, v2, true, material);
     }
 
-    public Triangle(Vec3 v0, Vec3 v1, Vec3 v2, boolean cull, Material material) {
+    public Triangle(
+            Vec3 v0, Vec3 v1, Vec3 v2, boolean cull, Material material) {
+
         super(material);
         this.v0 = v0;
         this.v1 = v1;
@@ -62,13 +64,11 @@ public class Triangle extends AbstractHittable {
         double invDet = 1 / det;
         double u = tVec.dot(pVec) * invDet;
         double v = dir.dot(qVec) * invDet;
-
         if (u < 0 || u > 1 || v < 0 || u + v > 1) {
             return false;
         }
 
         double t = v0v2.dot(qVec) * invDet;
-
         return rec.record(t, tMin, tMax, ray, this);
     }
 
@@ -76,7 +76,6 @@ public class Triangle extends AbstractHittable {
     public Vec3 getSurfaceNormal(Vec3 point) {
         Vec3 v0v1 = v1.sub(v0);
         Vec3 v0v2 = v2.sub(v0);
-
         return v0v1.cross(v0v2).unit();
     }
 }

@@ -18,35 +18,27 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) {
-        // Renderer
-        int width = 600;
-        int height = 400;
-        int maxRayDepth = 30;
-        int numberOfSamples = 50;
-        double tMin = 0.001;
-        double tMax = Double.MAX_VALUE;
-
-        // Camera
-        double aperture = 0.1;
-        double aspectRatio = (double) width / height;
-        double fieldOfView = 20;
-        double focusDistance = 10;
+        final int width = 600;
+        final int height = 400;
 
         Vec3 lookFrom = new Vec3(13, 2, 3);
         Vec3 lookAt = new Vec3(0, 0, 0);
         Vec3 lookUp = new Vec3(0, 1, 0);
 
-        Camera camera = new Camera.Builder(lookFrom, lookAt, lookUp).setAperture(aperture)
-                .setAspectRatio(aspectRatio)
-                .setFieldOfView(fieldOfView)
-                .setFocusDistance(focusDistance)
+        Camera camera = Camera.builder(lookFrom, lookAt, lookUp)
+                .setAperture(0.1)
+                .setAspectRatio((double) width / height)
+                .setFieldOfView(20)
+                .setFocusDistance(10)
                 .build();
 
-        Renderer renderer = new Renderer.Builder(tMin, tMax).setMaxRayDepth(maxRayDepth)
-                .setNumberOfSamples(numberOfSamples)
+        Renderer renderer = Renderer.builder(0.001, Double.MAX_VALUE)
+                .setMaxRayDepth(30)
+                .setNumberOfSamples(50)
                 .build();
 
-        RenderedImage renderedImage = renderer.render(randomScene(), camera, width, height);
+        RenderedImage renderedImage =
+                renderer.render(randomScene(), camera, width, height);
 
         try {
             ImageIO.write(renderedImage, "png", new File("render.png"));
@@ -66,24 +58,8 @@ public class Main {
                 double z = b + 0.9 * Math.random();
 
                 Vec3 center = new Vec3(x, y, z);
-
                 if (center.sub(new Vec3(4, 0.2, 0)).length() > 0.9) {
-                    Material sphereMat;
-
-                    double matChoose = Math.random();
-
-                    if (matChoose < 0.8) {
-                        // Diffuse
-                        sphereMat = new Lambertian(Vec3.rand(0, 0.5));
-                    } else if (matChoose < 0.95) {
-                        // Metal
-                        sphereMat = new Metal(Vec3.rand(0.5, 1), Math.random());
-                    } else {
-                        // Glass
-                        sphereMat = new Dielectric(1.5);
-                    }
-
-                    scene.add(new Sphere(0.2, center, sphereMat));
+                    scene.add(new Sphere(0.2, center, randomMaterial()));
                 }
             }
         }
@@ -100,6 +76,17 @@ public class Main {
         scene.add(new Sphere(1000, new Vec3(0, -1000, 0), matGround));
 
         return scene;
+    }
+
+    private static Material randomMaterial() {
+        double choose = Math.random();
+        if (choose < 0.8) {
+            return new Lambertian(Vec3.rand(0, 0.5));
+        } else if (choose < 0.95) {
+            return new Metal(Vec3.rand(0.5, 1), Math.random());
+        } else {
+            return new Dielectric(1.5);
+        }
     }
 
 }

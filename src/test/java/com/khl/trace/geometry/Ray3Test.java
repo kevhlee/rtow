@@ -26,7 +26,6 @@ public class Ray3Test {
     public void testGetOrigin() {
         Vec3 actual = ray.getOrigin();
         Vec3 expected = new Vec3(1, 0, -1);
-
         Vec3Assertions.assertEqualVec(expected, actual, EPSILON);
     }
 
@@ -35,7 +34,6 @@ public class Ray3Test {
     public void testGetDirection() {
         Vec3 actual = ray.getDirection();
         Vec3 expected = new Vec3(0.5, -1, 2);
-
         Vec3Assertions.assertEqualVec(expected, actual, EPSILON);
     }
 

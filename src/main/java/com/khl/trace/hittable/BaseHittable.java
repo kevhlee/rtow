@@ -7,11 +7,11 @@ import com.khl.trace.material.Material;
  *
  * @author Kevin Lee
  */
-public abstract class AbstractHittable implements Hittable {
+public abstract class BaseHittable implements Hittable {
 
     private final Material material;
 
-    public AbstractHittable(Material material) {
+    public BaseHittable(Material material) {
         this.material = material;
     }
 

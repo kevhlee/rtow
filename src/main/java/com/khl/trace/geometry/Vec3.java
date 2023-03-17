@@ -16,20 +16,17 @@ public class Vec3 {
     }
 
     public static Vec3 rand(double min, double max) {
-        double x = (max - min) * Math.random() + min;
-        double y = (max - min) * Math.random() + min;
-        double z = (max - min) * Math.random() + min;
-
-        return new Vec3(x, y, z);
+        return new Vec3(
+                (max - min) * Math.random() + min,
+                (max - min) * Math.random() + min,
+                (max - min) * Math.random() + min);
     }
 
     public static Vec3 randUnitSphere() {
         Vec3 point = rand(-1, 1);
-
         while (point.lengthSq() >= 1) {
             point = rand(-1, 1);
         }
-
         return point;
     }
 
@@ -37,28 +34,23 @@ public class Vec3 {
         double a = Math.random() * 2 * Math.PI;
         double z = 2 * Math.random() - 1;
         double r = Math.sqrt(1 - z * z);
-
         return new Vec3(r * Math.cos(a), r * Math.sin(a), z);
     }
 
     public static Vec3 randHemisphere(Vec3 normal) {
         Vec3 inUnitSphere = randUnitSphere();
-
         if (inUnitSphere.dot(normal) <= 0.0) {
             return inUnitSphere.neg();
         }
-
         return inUnitSphere;
     }
 
     public static Vec3 randUnitDisk() {
         Vec3 point = new Vec3(2 * Math.random() - 1, 2 * Math.random() - 1, 0);
-
         while (point.lengthSq() >= 1) {
             point.setX(2 * Math.random() - 1);
             point.setY(2 * Math.random() - 1);
         }
-
         return point;
     }
 
@@ -70,7 +62,9 @@ public class Vec3 {
         double cosTheta = -uv.dot(normal);
 
         Vec3 rOutPerp = uv.add(normal.mul(cosTheta)).mul(refractRatio);
-        Vec3 rOutParallel = normal.mul(-Math.sqrt(Math.abs(1.0 - rOutPerp.lengthSq())));
+
+        Vec3 rOutParallel =
+                normal.mul(-Math.sqrt(Math.abs(1.0 - rOutPerp.lengthSq())));
 
         return rOutPerp.add(rOutParallel);
     }
@@ -135,28 +129,22 @@ public class Vec3 {
         return new Vec3(x * other.x, y * other.y, z * other.z);
     }
 
-    public Vec3 addInPlace(Vec3 other) {
+    public void addInPlace(Vec3 other) {
         this.x += other.x;
         this.y += other.y;
         this.z += other.z;
-
-        return this;
     }
 
-    public Vec3 subInPlace(Vec3 other) {
+    public void subInPlace(Vec3 other) {
         this.x -= other.x;
         this.y -= other.y;
         this.z -= other.z;
-
-        return this;
     }
 
-    public Vec3 mulInPlace(double scalar) {
+    public void mulInPlace(double scalar) {
         this.x *= scalar;
         this.y *= scalar;
         this.z *= scalar;
-
-        return this;
     }
 
     public void mulInPlace(Vec3 other) {

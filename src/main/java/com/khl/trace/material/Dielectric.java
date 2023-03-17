@@ -32,7 +32,9 @@ public class Dielectric implements Material {
 
         Vec3 direction;
 
-        if (refractRatio * sinTheta > 1.0 || reflectance(cosTheta, refractRatio) > Math.random()) {
+        if (refractRatio * sinTheta > 1.0 ||
+                reflectance(cosTheta, refractRatio) > Math.random()) {
+
             direction = Vec3.reflect(unitDir, normal);
         } else {
             direction = Vec3.refract(unitDir, normal, refractRatio);

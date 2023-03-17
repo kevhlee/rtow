@@ -15,56 +15,34 @@ import java.awt.image.RenderedImage;
  */
 public class Renderer {
 
-    public static class Builder {
-
-        private final double tMax;
-        private final double tMin;
-
-        private int maxRayDepth;
-        private int numberOfSamples;
-
-        public Builder(double tMin, double tMax) {
-            this.tMax = tMax;
-            this.tMin = tMin;
-        }
-
-        public Builder setMaxRayDepth(int maxRayDepth) {
-            this.maxRayDepth = maxRayDepth;
-            return this;
-        }
-
-        public Builder setNumberOfSamples(int numberOfSamples) {
-            this.numberOfSamples = numberOfSamples;
-            return this;
-        }
-
-        public Renderer build() {
-            return new Renderer(this);
-        }
-
-    }
-
     private final double tMin;
     private final double tMax;
 
     private final int maxRayDepth;
     private final int numberOfSamples;
 
-    public Renderer(Builder builder) {
+    private Renderer(Builder builder) {
         this.tMin = builder.tMin;
         this.tMax = builder.tMax;
         this.maxRayDepth = builder.maxRayDepth;
         this.numberOfSamples = builder.numberOfSamples;
     }
 
-    public RenderedImage render(Scene scene, Camera camera, int width, int height) {
+    public static Builder builder(double tMin, double tMax) {
+        return new Builder(tMin, tMax);
+    }
 
-        BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+    public RenderedImage render(
+            Scene scene, Camera camera, int width, int height) {
+
+        BufferedImage bufferedImage =
+                new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
 
         HitRecord record = new HitRecord();
 
         for (int y = 0; y < height; y++) {
-            System.out.print("\rScanlines remaining: " + (height - y - 1) + " \b");
+            System.out.print(
+                    "\rScanlines remaining: " + (height - y - 1) + " \b");
 
             for (int x = 0; x < width; x++) {
                 Vec3 pixel = new Vec3(0, 0, 0);
@@ -73,9 +51,8 @@ public class Renderer {
                     double u = (x + Math.random()) / (width - 1);
                     double v = (y + Math.random()) / (height - 1);
 
-                    Ray3 ray = camera.buildRay(u, v);
-
-                    pixel.addInPlace(trace(ray, scene, record, 0));
+                    pixel.addInPlace(
+                            trace(camera.generateRay(u, v), scene, record, 0));
                 }
 
                 bufferedImage.setRGB(x, height - (y + 1), toRGB(pixel));
@@ -110,7 +87,9 @@ public class Renderer {
         Vec3 unitDir = ray.getDirection().unit();
         double t = 0.5 * (unitDir.getY() + 1.0);
 
-        return new Vec3(1.0, 1.0, 1.0).mul(1.0 - t).add(new Vec3(0.5, 0.7, 1.0).mul(t));
+        return new Vec3(1.0, 1.0, 1.0)
+                .mul(1.0 - t)
+                .add(new Vec3(0.5, 0.7, 1.0).mul(t));
     }
 
     private int toRGB(Vec3 color) {
@@ -131,6 +110,35 @@ public class Renderer {
 
     private double clamp(double a, double min, double max) {
         return Math.min(Math.max(a, min), max);
+    }
+
+    public static class Builder {
+
+        private final double tMax;
+        private final double tMin;
+
+        private int maxRayDepth;
+        private int numberOfSamples;
+
+        private Builder(double tMin, double tMax) {
+            this.tMax = tMax;
+            this.tMin = tMin;
+        }
+
+        public Builder setMaxRayDepth(int maxRayDepth) {
+            this.maxRayDepth = maxRayDepth;
+            return this;
+        }
+
+        public Builder setNumberOfSamples(int numberOfSamples) {
+            this.numberOfSamples = numberOfSamples;
+            return this;
+        }
+
+        public Renderer build() {
+            return new Renderer(this);
+        }
+
     }
 
 }

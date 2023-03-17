@@ -9,7 +9,7 @@ import com.khl.trace.material.Material;
  *
  * @author Kevin Lee
  */
-public class Plane extends AbstractHittable {
+public class Plane extends BaseHittable {
 
     private final Vec3 origin;
     private final Vec3 normal;

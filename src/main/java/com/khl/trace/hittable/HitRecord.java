@@ -37,7 +37,9 @@ public class HitRecord {
         return frontFace;
     }
 
-    public boolean record(double t, double tMin, double tMax, Ray3 ray, Hittable hittable) {
+    public boolean record(
+            double t, double tMin, double tMax, Ray3 ray, Hittable hittable) {
+
         if (t <= tMin || t >= tMax) {
             return false;
         }

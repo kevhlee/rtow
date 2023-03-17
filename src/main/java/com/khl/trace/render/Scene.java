@@ -21,8 +21,8 @@ public class Scene implements Iterable<Hittable> {
         this.hittables = new HashSet<>();
     }
 
-    public boolean add(Hittable hittable) {
-        return hittables.add(hittable);
+    public void add(Hittable hittable) {
+        hittables.add(hittable);
     }
 
     public boolean hit(double tMin, double tMax, Ray3 ray, HitRecord rec) {
