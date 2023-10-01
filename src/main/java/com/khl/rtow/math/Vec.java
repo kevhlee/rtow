@@ -152,7 +152,7 @@ public class Vec {
 
     @Override
     public String toString() {
-        return String.format("Vec3[ %.3f %.3f %.3f ]", x, y, z);
+        return String.format("(%f, %f, %f)", x, y, z);
     }
 
 }

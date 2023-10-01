@@ -19,29 +19,49 @@ public class Main {
         final var width = 600;
         final var height = 400;
 
-        var lookFrom = new Vec(13, 2, 3);
+        var origin = new Vec(13, 2, 3);
         var lookAt = new Vec(0, 0, 0);
         var lookUp = new Vec(0, 1, 0);
 
-        var camera = Camera.builder(lookFrom, lookAt, lookUp)
+        var camera = new Camera(origin, lookAt, lookUp)
                 .setAperture(0.1)
-                .setAspectRatio((double) width / height)
                 .setFieldOfView(20)
-                .setFocusDistance(10)
-                .build();
+                .setFocusDistance(10);
 
-        var renderer = Renderer.builder(0.001, Double.MAX_VALUE)
+        var renderer = new Renderer(0.001, Double.MAX_VALUE)
                 .setMaxRayDepth(30)
                 .setNumberOfSamples(50)
-                .build();
+                .setNumberOfThreads(Runtime.getRuntime().availableProcessors());
+
+        printConfiguration(width, height, camera, renderer);
 
         try {
-            var renderedImage = renderer.render(randomScene(), camera, width, height);
+            var scene = randomScene();
+            var image = renderer.render(scene, camera, width, height);
 
-            ImageIO.write(renderedImage, "png", new File("render.png"));
+            ImageIO.write(image, "png", new File("render.png"));
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
         }
+    }
+
+    private static void printConfiguration(
+            int width, int height, Camera camera, Renderer renderer) {
+
+        System.out.println("### Camera configuration ###");
+        System.out.println("Origin: " + camera.getOrigin());
+        System.out.println("Aperture: " + camera.getAperture());
+        System.out.println("Field-of-view: " + camera.getFieldOfView());
+        System.out.println("Focus distance: " + camera.getFocusDistance());
+        System.out.println();
+
+        System.out.println("### Renderer configuration ###");
+        System.out.println("Image width: " + width);
+        System.out.println("Image height: " + height);
+        System.out.println("Max ray depth: " + renderer.getMaxRayDepth());
+        System.out.println("Number of samples: " + renderer.getNumberOfSamples());
+        System.out.println("Number of threads: " + renderer.getNumberOfThreads());
+        System.out.println();
     }
 
     private static Scene randomScene() {

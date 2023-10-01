@@ -18,27 +18,50 @@ import java.util.concurrent.Future;
  */
 public class Renderer {
 
+    public static final int DEFAULT_MAX_RAY_DEPTH = 30;
+    public static final int DEFAULT_NUMBER_OF_SAMPLES = 50;
+    public static final int DEFAULT_NUMBER_OF_THREADS = Runtime.getRuntime().availableProcessors();
+
+    private int maxRayDepth;
+    private int numberOfSamples;
+    private int numberOfThreads;
     private final double tMin;
     private final double tMax;
 
-    private final int maxRayDepth;
-    private final int numberOfSamples;
-
-    private Renderer(Builder builder) {
-        this.tMin = builder.tMin;
-        this.tMax = builder.tMax;
-        this.maxRayDepth = builder.maxRayDepth;
-        this.numberOfSamples = builder.numberOfSamples;
+    public Renderer(double tMin, double tMax) {
+        this(tMin, tMax, DEFAULT_MAX_RAY_DEPTH, DEFAULT_NUMBER_OF_SAMPLES);
     }
 
-    public static Builder builder(double tMin, double tMax) {
-        return new Builder(tMin, tMax);
+    public Renderer(double tMin, double tMax, int maxRayDepth, int numberOfSamples) {
+        this(tMin, tMax, maxRayDepth, numberOfSamples, DEFAULT_NUMBER_OF_THREADS);
+    }
+
+    public Renderer(double tMin, double tMax, int maxRayDepth, int numberOfSamples, int numberOfThreads) {
+        this.tMin = tMin;
+        this.tMax = tMax;
+        this.maxRayDepth = maxRayDepth;
+        this.numberOfSamples = numberOfSamples;
+        this.numberOfThreads = numberOfThreads;
+    }
+
+    public int getMaxRayDepth() {
+        return maxRayDepth;
+    }
+
+    public int getNumberOfSamples() {
+        return numberOfSamples;
+    }
+
+    public int getNumberOfThreads() {
+        return numberOfThreads;
     }
 
     public RenderedImage render(Scene scene, Camera camera, int width, int height)
             throws ExecutionException, InterruptedException {
 
-        var executor = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors());
+        camera.initialize(width, height);
+
+        var executor = Executors.newWorkStealingPool(numberOfThreads);
         var futures = new ArrayList<Future<Pixel>>();
 
         for (var i = 0; i < height; i++) {
@@ -64,18 +87,78 @@ public class Renderer {
             }
         }
 
-        executor.shutdown();
-
+        var count = 0;
+        var total = width * height;
         var bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        executor.shutdown();
 
         for (var future : futures) {
             var pixel = future.get();
             bufferedImage.setRGB(pixel.x, pixel.y, pixel.rgb);
+            count++;
+            System.out.print("\rPercentage of image rendered: " + (100 * count / total) + "% \b");
         }
 
         System.out.println("\nDone.");
 
         return bufferedImage;
+    }
+
+    public Renderer setMaxRayDepth(int maxRayDepth) throws IllegalArgumentException {
+        if (maxRayDepth <= 0) {
+            throw new IllegalArgumentException("Max ray depth must be positive");
+        }
+
+        this.maxRayDepth = maxRayDepth;
+        return this;
+    }
+
+    public Renderer setNumberOfSamples(int numberOfSamples) {
+        if (numberOfSamples <= 0) {
+            throw new IllegalArgumentException("Number of samples must be positive");
+        }
+
+        this.numberOfSamples = numberOfSamples;
+        return this;
+    }
+
+    public Renderer setNumberOfThreads(int numberOfThreads) {
+        if (numberOfThreads <= 0) {
+            throw new IllegalArgumentException("Number of rendering threads must be positive");
+        }
+
+        this.numberOfThreads = numberOfThreads;
+        return this;
+    }
+
+    private Vec backgroundColor(Ray ray) {
+        var unitDir = ray.getDirection().unit();
+        var t = 0.5 * (unitDir.getY() + 1.0);
+
+        return new Vec(1.0, 1.0, 1.0)
+                .mul(1.0 - t)
+                .add(new Vec(0.5, 0.7, 1.0).mul(t));
+    }
+
+    private double clamp(double a, double min, double max) {
+        return Math.min(Math.max(a, min), max);
+    }
+
+    private int toRGB(Vec color) {
+        return toRGB(color.getX(), color.getY(), color.getZ());
+    }
+
+    private int toRGB(double r, double g, double b) {
+        r = Math.sqrt(r / numberOfSamples);
+        g = Math.sqrt(g / numberOfSamples);
+        b = Math.sqrt(b / numberOfSamples);
+
+        var ir = (int) (256 * clamp(r, 0.0, 0.999));
+        var ig = (int) (256 * clamp(g, 0.0, 0.999));
+        var ib = (int) (256 * clamp(b, 0.0, 0.999));
+
+        return (ir << 16) | (ig << 8) | ib;
     }
 
     private Vec trace(Ray ray, Scene scene, HitRecord record, int depth) {
@@ -97,64 +180,7 @@ public class Renderer {
         return backgroundColor(ray);
     }
 
-    private Vec backgroundColor(Ray ray) {
-        var unitDir = ray.getDirection().unit();
-        var t = 0.5 * (unitDir.getY() + 1.0);
-
-        return new Vec(1.0, 1.0, 1.0)
-                .mul(1.0 - t)
-                .add(new Vec(0.5, 0.7, 1.0).mul(t));
+    private record Pixel(int x, int y, int rgb) {
     }
-
-    private int toRGB(Vec color) {
-        return toRGB(color.getX(), color.getY(), color.getZ());
-    }
-
-    private int toRGB(double r, double g, double b) {
-        r = Math.sqrt(r / numberOfSamples);
-        g = Math.sqrt(g / numberOfSamples);
-        b = Math.sqrt(b / numberOfSamples);
-
-        var ir = (int) (256 * clamp(r, 0.0, 0.999));
-        var ig = (int) (256 * clamp(g, 0.0, 0.999));
-        var ib = (int) (256 * clamp(b, 0.0, 0.999));
-
-        return (ir << 16) | (ig << 8) | ib;
-    }
-
-    private double clamp(double a, double min, double max) {
-        return Math.min(Math.max(a, min), max);
-    }
-
-    public static class Builder {
-
-        private final double tMax;
-        private final double tMin;
-
-        private int maxRayDepth;
-        private int numberOfSamples;
-
-        private Builder(double tMin, double tMax) {
-            this.tMax = tMax;
-            this.tMin = tMin;
-        }
-
-        public Builder setMaxRayDepth(int maxRayDepth) {
-            this.maxRayDepth = maxRayDepth;
-            return this;
-        }
-
-        public Builder setNumberOfSamples(int numberOfSamples) {
-            this.numberOfSamples = numberOfSamples;
-            return this;
-        }
-
-        public Renderer build() {
-            return new Renderer(this);
-        }
-
-    }
-
-    private record Pixel(int x, int y, int rgb) {}
 
 }
