@@ -1,8 +1,8 @@
 package com.khl.rtow.hittable;
 
 import com.khl.rtow.material.Material;
-import com.khl.rtow.math.Ray3;
-import com.khl.rtow.math.Vec3;
+import com.khl.rtow.math.Ray;
+import com.khl.rtow.math.Vec;
 
 /**
  * A class used for storing information about ray-intersections.
@@ -12,8 +12,8 @@ import com.khl.rtow.math.Vec3;
 public class HitRecord {
 
     private double t;
-    private Vec3 point;
-    private Vec3 normal;
+    private Vec point;
+    private Vec normal;
     private boolean frontFace;
     private Material material;
 
@@ -21,11 +21,11 @@ public class HitRecord {
         return t;
     }
 
-    public Vec3 getPoint() {
+    public Vec getPoint() {
         return point;
     }
 
-    public Vec3 getNormal() {
+    public Vec getNormal() {
         return normal;
     }
 
@@ -37,15 +37,13 @@ public class HitRecord {
         return frontFace;
     }
 
-    public boolean record(
-            double t, double tMin, double tMax, Ray3 ray, Hittable hittable) {
-
+    public boolean record(double t, double tMin, double tMax, Ray ray, Hittable hittable) {
         if (t <= tMin || t >= tMax) {
             return false;
         }
 
-        Vec3 point = ray.at(t);
-        Vec3 outwardNormal = hittable.getSurfaceNormal(point);
+        var point = ray.at(t);
+        var outwardNormal = hittable.getSurfaceNormal(point);
 
         this.t = t;
         this.point = point;

@@ -1,8 +1,8 @@
 package com.khl.rtow.material;
 
 import com.khl.rtow.hittable.HitRecord;
-import com.khl.rtow.math.Ray3;
-import com.khl.rtow.math.Vec3;
+import com.khl.rtow.math.Ray;
+import com.khl.rtow.math.Vec;
 
 /**
  * A Lambertian-based diffuse surface material.
@@ -11,17 +11,16 @@ import com.khl.rtow.math.Vec3;
  */
 public class Lambertian extends Albedo {
 
-    public Lambertian(Vec3 albedo) {
+    public Lambertian(Vec albedo) {
         super(albedo);
     }
 
     @Override
-    public boolean scatter(Ray3 ray, HitRecord rec, Vec3 attenuation) {
+    public boolean scatter(Ray ray, HitRecord rec, Vec attenuation) {
         ray.setOrigin(rec.getPoint());
-        ray.setDirection(rec.getNormal().add(Vec3.randUnit()));
+        ray.setDirection(rec.getNormal().add(Vec.randUnit()));
 
-        Vec3 albedo = getAlbedo();
-
+        var albedo = getAlbedo();
         attenuation.setX(albedo.getX());
         attenuation.setY(albedo.getY());
         attenuation.setZ(albedo.getZ());

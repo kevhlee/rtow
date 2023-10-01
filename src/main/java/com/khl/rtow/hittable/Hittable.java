@@ -1,8 +1,8 @@
 package com.khl.rtow.hittable;
 
 import com.khl.rtow.material.Material;
-import com.khl.rtow.math.Ray3;
-import com.khl.rtow.math.Vec3;
+import com.khl.rtow.math.Ray;
+import com.khl.rtow.math.Vec;
 
 /**
  * An interface for ray-hittable objects.
@@ -11,9 +11,9 @@ import com.khl.rtow.math.Vec3;
  */
 public interface Hittable {
 
-    boolean hit(double tMin, double tMax, Ray3 ray, HitRecord rec);
+    boolean hit(double tMin, double tMax, Ray ray, HitRecord rec);
 
-    Vec3 getSurfaceNormal(Vec3 point);
+    Vec getSurfaceNormal(Vec point);
 
     Material getMaterial();
 

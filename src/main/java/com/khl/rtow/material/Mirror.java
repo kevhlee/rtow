@@ -1,6 +1,6 @@
 package com.khl.rtow.material;
 
-import com.khl.rtow.math.Vec3;
+import com.khl.rtow.math.Vec;
 
 /**
  * A purely reflective surface material.
@@ -10,7 +10,7 @@ import com.khl.rtow.math.Vec3;
 public class Mirror extends Reflective {
 
     public Mirror() {
-        super(new Vec3(1, 1, 1));
+        super(new Vec(1, 1, 1));
     }
 
 }

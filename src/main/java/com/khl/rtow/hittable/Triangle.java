@@ -1,8 +1,8 @@
 package com.khl.rtow.hittable;
 
 import com.khl.rtow.material.Material;
-import com.khl.rtow.math.Ray3;
-import com.khl.rtow.math.Vec3;
+import com.khl.rtow.math.Ray;
+import com.khl.rtow.math.Vec;
 
 /**
  * A hittable triangle in 3D space.
@@ -15,17 +15,17 @@ import com.khl.rtow.math.Vec3;
  */
 public class Triangle extends BaseHittable {
 
-    private final Vec3 v0;
-    private final Vec3 v1;
-    private final Vec3 v2;
+    private final Vec v0;
+    private final Vec v1;
+    private final Vec v2;
     private final boolean cull;
 
-    public Triangle(Vec3 v0, Vec3 v1, Vec3 v2, Material material) {
+    public Triangle(Vec v0, Vec v1, Vec v2, Material material) {
         this(v0, v1, v2, true, material);
     }
 
     public Triangle(
-            Vec3 v0, Vec3 v1, Vec3 v2, boolean cull, Material material) {
+            Vec v0, Vec v1, Vec v2, boolean cull, Material material) {
 
         super(material);
         this.v0 = v0;
@@ -39,14 +39,14 @@ public class Triangle extends BaseHittable {
     }
 
     @Override
-    public boolean hit(double tMin, double tMax, Ray3 ray, HitRecord rec) {
-        Vec3 dir = ray.getDirection();
-        Vec3 origin = ray.getOrigin();
+    public boolean hit(double tMin, double tMax, Ray ray, HitRecord rec) {
+        var dir = ray.getDirection();
+        var origin = ray.getOrigin();
 
-        Vec3 v0v1 = v1.sub(v0);
-        Vec3 v0v2 = v2.sub(v0);
-        Vec3 pVec = dir.cross(v0v2);
-        double det = v0v1.dot(pVec);
+        var v0v1 = v1.sub(v0);
+        var v0v2 = v2.sub(v0);
+        var pVec = dir.cross(v0v2);
+        var det = v0v1.dot(pVec);
 
         // Check if triangle is backfacing if culling is enabled
         if (cull && det < 1e-6) {
@@ -58,24 +58,24 @@ public class Triangle extends BaseHittable {
             return false;
         }
 
-        Vec3 tVec = origin.sub(v0);
-        Vec3 qVec = tVec.cross(v0v1);
+        var tVec = origin.sub(v0);
+        var qVec = tVec.cross(v0v1);
 
-        double invDet = 1 / det;
-        double u = tVec.dot(pVec) * invDet;
-        double v = dir.dot(qVec) * invDet;
+        var invDet = 1 / det;
+        var u = tVec.dot(pVec) * invDet;
+        var v = dir.dot(qVec) * invDet;
         if (u < 0 || u > 1 || v < 0 || u + v > 1) {
             return false;
         }
 
-        double t = v0v2.dot(qVec) * invDet;
+        var t = v0v2.dot(qVec) * invDet;
         return rec.record(t, tMin, tMax, ray, this);
     }
 
     @Override
-    public Vec3 getSurfaceNormal(Vec3 point) {
-        Vec3 v0v1 = v1.sub(v0);
-        Vec3 v0v2 = v2.sub(v0);
+    public Vec getSurfaceNormal(Vec point) {
+        Vec v0v1 = v1.sub(v0);
+        Vec v0v2 = v2.sub(v0);
         return v0v1.cross(v0v2).unit();
     }
 }

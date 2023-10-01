@@ -2,7 +2,7 @@ package com.khl.rtow.render;
 
 import com.khl.rtow.hittable.HitRecord;
 import com.khl.rtow.hittable.Hittable;
-import com.khl.rtow.math.Ray3;
+import com.khl.rtow.math.Ray;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,9 +25,9 @@ public class Scene implements Iterable<Hittable> {
         hittables.add(hittable);
     }
 
-    public boolean hit(double tMin, double tMax, Ray3 ray, HitRecord rec) {
-        boolean hit = false;
-        double tClosest = tMax;
+    public boolean hit(double tMin, double tMax, Ray ray, HitRecord rec) {
+        var hit = false;
+        var tClosest = tMax;
 
         for (Hittable hittable : this) {
             if (hittable.hit(tMin, tClosest, ray, rec)) {

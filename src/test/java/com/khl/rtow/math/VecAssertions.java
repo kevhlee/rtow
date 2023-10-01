@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Assertions;
  *
  * @author Kevin Lee
  */
-public class Vec3Assertions {
+public class VecAssertions {
 
-    public static void assertEqualVec(Vec3 expected, Vec3 actual, double epsilon) {
+    public static void assertEqualVec(Vec expected, Vec actual, double epsilon) {
         Assertions.assertEquals(expected.getX(), actual.getX(), epsilon);
         Assertions.assertEquals(expected.getY(), actual.getY(), epsilon);
         Assertions.assertEquals(expected.getZ(), actual.getZ(), epsilon);

@@ -1,8 +1,8 @@
 package com.khl.rtow.material;
 
 import com.khl.rtow.hittable.HitRecord;
-import com.khl.rtow.math.Ray3;
-import com.khl.rtow.math.Vec3;
+import com.khl.rtow.math.Ray;
+import com.khl.rtow.math.Vec;
 
 /**
  * A dielectric/transparent surface material.
@@ -18,26 +18,23 @@ public class Dielectric implements Material {
     }
 
     @Override
-    public boolean scatter(Ray3 ray, HitRecord rec, Vec3 attenuation) {
+    public boolean scatter(Ray ray, HitRecord rec, Vec attenuation) {
         attenuation.setX(1.0);
         attenuation.setY(1.0);
         attenuation.setZ(1.0);
 
-        Vec3 normal = rec.getNormal();
-        Vec3 unitDir = ray.getDirection().unit();
+        var normal = rec.getNormal();
+        var unitDir = ray.getDirection().unit();
 
-        double cosTheta = Math.min(unitDir.neg().dot(normal), 1.0);
-        double sinTheta = Math.sqrt(1.0 - cosTheta * cosTheta);
-        double refractRatio = rec.isFrontFace() ? (1.0 / ir) : ir;
+        var cosTheta = Math.min(unitDir.neg().dot(normal), 1.0);
+        var sinTheta = Math.sqrt(1.0 - cosTheta * cosTheta);
+        var refractRatio = rec.isFrontFace() ? (1.0 / ir) : ir;
 
-        Vec3 direction;
-
-        if (refractRatio * sinTheta > 1.0 ||
-                reflectance(cosTheta, refractRatio) > Math.random()) {
-
-            direction = Vec3.reflect(unitDir, normal);
+        Vec direction;
+        if (refractRatio * sinTheta > 1.0 || reflectance(cosTheta, refractRatio) > Math.random()) {
+            direction = Vec.reflect(unitDir, normal);
         } else {
-            direction = Vec3.refract(unitDir, normal, refractRatio);
+            direction = Vec.refract(unitDir, normal, refractRatio);
         }
 
         ray.setOrigin(rec.getPoint());
@@ -47,7 +44,7 @@ public class Dielectric implements Material {
     }
 
     private double reflectance(double cosine, double refractIndex) {
-        double r0 = (1 - refractIndex) / (1 + refractIndex);
+        var r0 = (1 - refractIndex) / (1 + refractIndex);
         r0 *= r0;
         return r0 + (1 - r0) * Math.pow(1 - cosine, 5);
     }

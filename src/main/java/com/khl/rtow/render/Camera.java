@@ -1,7 +1,7 @@
 package com.khl.rtow.render;
 
-import com.khl.rtow.math.Ray3;
-import com.khl.rtow.math.Vec3;
+import com.khl.rtow.math.Ray;
+import com.khl.rtow.math.Vec;
 
 /**
  * A 3D camera for rendering scenes.
@@ -10,20 +10,20 @@ import com.khl.rtow.math.Vec3;
  */
 public class Camera {
 
-    private final Vec3 u;
-    private final Vec3 v;
-    private final Vec3 w;
-    private final Vec3 origin;
-    private final Vec3 vertical;
-    private final Vec3 horizontal;
-    private final Vec3 lowerLeftCorner;
+    private final Vec u;
+    private final Vec v;
+    private final Vec w;
+    private final Vec origin;
+    private final Vec vertical;
+    private final Vec horizontal;
+    private final Vec lowerLeftCorner;
     private final double lensRadius;
 
     private Camera(Builder builder) {
-        double theta = Math.toRadians(builder.fieldOfView);
-        double h = Math.tan(theta / 2);
-        double viewportHeight = 2.0 * h;
-        double viewportWidth = builder.aspectRatio * viewportHeight;
+        var theta = Math.toRadians(builder.fieldOfView);
+        var h = Math.tan(theta / 2);
+        var viewportHeight = 2.0 * h;
+        var viewportWidth = builder.aspectRatio * viewportHeight;
 
         w = builder.lookFrom.sub(builder.lookAt).unit();
         u = builder.lookUp.cross(w).unit();
@@ -32,6 +32,7 @@ public class Camera {
         origin = builder.lookFrom;
         vertical = v.mul(viewportHeight * builder.focusDistance);
         horizontal = u.mul(viewportWidth * builder.focusDistance);
+
         lowerLeftCorner = origin.sub(horizontal.mul(0.5))
                 .sub(vertical.mul(0.5))
                 .sub(w.mul(builder.focusDistance));
@@ -39,34 +40,34 @@ public class Camera {
         lensRadius = builder.aperture / 2.0;
     }
 
-    public static Builder builder(Vec3 lookFrom, Vec3 lookAt, Vec3 lookUp) {
+    public static Builder builder(Vec lookFrom, Vec lookAt, Vec lookUp) {
         return new Builder(lookFrom, lookAt, lookUp);
     }
 
-    public Ray3 generateRay(double s, double t) {
-        Vec3 rd = Vec3.randUnitDisk().mul(lensRadius);
-        Vec3 offset = u.mul(rd.getX()).add(v.mul(rd.getY()));
+    public Ray generateRay(double s, double t) {
+        var rd = Vec.randUnitDisk().mul(lensRadius);
+        var offset = u.mul(rd.getX()).add(v.mul(rd.getY()));
 
-        Vec3 direction = lowerLeftCorner.add(horizontal.mul(s))
+        var direction = lowerLeftCorner.add(horizontal.mul(s))
                 .add(vertical.mul(t))
                 .sub(origin)
                 .sub(offset);
 
-        return new Ray3(origin.add(offset), direction);
+        return new Ray(origin.add(offset), direction);
     }
 
     public static class Builder {
 
-        private final Vec3 lookFrom;
-        private final Vec3 lookAt;
-        private final Vec3 lookUp;
+        private final Vec lookFrom;
+        private final Vec lookAt;
+        private final Vec lookUp;
 
         private double aperture;
         private double aspectRatio;
         private double fieldOfView;
         private double focusDistance;
 
-        private Builder(Vec3 lookFrom, Vec3 lookAt, Vec3 lookUp) {
+        private Builder(Vec lookFrom, Vec lookAt, Vec lookUp) {
             this.lookFrom = lookFrom;
             this.lookAt = lookAt;
             this.lookUp = lookUp;

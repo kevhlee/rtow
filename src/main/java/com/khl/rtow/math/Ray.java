@@ -5,33 +5,33 @@ package com.khl.rtow.math;
  *
  * @author Kevin Lee
  */
-public class Ray3 {
+public class Ray {
 
-    private Vec3 origin;
-    private Vec3 direction;
+    private Vec origin;
+    private Vec direction;
 
-    public Ray3(Vec3 origin, Vec3 direction) {
+    public Ray(Vec origin, Vec direction) {
         this.origin = origin;
         this.direction = direction;
     }
 
-    public Vec3 at(double t) {
+    public Vec at(double t) {
         return origin.add(direction.mul(t));
     }
 
-    public Vec3 getOrigin() {
+    public Vec getOrigin() {
         return origin;
     }
 
-    public Vec3 getDirection() {
+    public Vec getDirection() {
         return direction;
     }
 
-    public void setOrigin(Vec3 origin) {
+    public void setOrigin(Vec origin) {
         this.origin = origin;
     }
 
-    public void setDirection(Vec3 direction) {
+    public void setDirection(Vec direction) {
         this.direction = direction;
     }
 
