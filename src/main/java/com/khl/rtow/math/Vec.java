@@ -131,24 +131,6 @@ public class Vec {
         z += other.z;
     }
 
-    public void subInPlace(Vec other) {
-        x -= other.x;
-        y -= other.y;
-        z -= other.z;
-    }
-
-    public void mulInPlace(double scalar) {
-        x *= scalar;
-        y *= scalar;
-        z *= scalar;
-    }
-
-    public void mulInPlace(Vec other) {
-        x *= other.x;
-        y *= other.y;
-        z *= other.z;
-    }
-
     public double dot(Vec other) {
         return (x * other.x) + (y * other.y) + (z * other.z);
     }

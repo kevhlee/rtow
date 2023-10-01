@@ -6,6 +6,10 @@ import com.khl.rtow.math.Vec;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 /**
  * A ray-tracing tracer.
@@ -31,25 +35,42 @@ public class Renderer {
         return new Builder(tMin, tMax);
     }
 
-    public RenderedImage render(Scene scene, Camera camera, int width, int height) {
-        var bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        var record = new HitRecord();
+    public RenderedImage render(Scene scene, Camera camera, int width, int height)
+            throws ExecutionException, InterruptedException {
 
-        for (var y = 0; y < height; y++) {
-            System.out.print("\rScanlines remaining: " + (height - y - 1) + " \b");
+        var executor = Executors.newWorkStealingPool(Runtime.getRuntime().availableProcessors());
+        var futures = new ArrayList<Future<Pixel>>();
 
-            for (var x = 0; x < width; x++) {
-                var pixel = new Vec(0, 0, 0);
+        for (var i = 0; i < height; i++) {
+            for (var j = 0; j < width; j++) {
+                final var x = j;
+                final var y = i;
 
-                for (int s = 0; s < numberOfSamples; s++) {
-                    double u = (x + Math.random()) / (width - 1);
-                    double v = (y + Math.random()) / (height - 1);
+                var future = executor.submit(() -> {
+                    var result = new Vec(0, 0, 0);
+                    var record = new HitRecord();
 
-                    pixel.addInPlace(trace(camera.generateRay(u, v), scene, record, 0));
-                }
+                    for (int s = 0; s < numberOfSamples; s++) {
+                        var u = (x + Math.random()) / (width - 1);
+                        var v = (y + Math.random()) / (height - 1);
 
-                bufferedImage.setRGB(x, height - (y + 1), toRGB(pixel));
+                        result.addInPlace(trace(camera.generateRay(u, v), scene, record, 0));
+                    }
+
+                    return new Pixel(x, height - (y + 1), toRGB(result));
+                });
+
+                futures.add(future);
             }
+        }
+
+        executor.shutdown();
+
+        var bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+        for (var future : futures) {
+            var pixel = future.get();
+            bufferedImage.setRGB(pixel.x, pixel.y, pixel.rgb);
         }
 
         System.out.println("\nDone.");
@@ -133,5 +154,7 @@ public class Renderer {
         }
 
     }
+
+    private record Pixel(int x, int y, int rgb) {}
 
 }

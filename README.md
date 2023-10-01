@@ -12,6 +12,7 @@ __Features:__
 - Lambertian, reflective, metal, dielectric materials
 - Supersampling anti-aliasing
 - Positionable camera
+- Multithreaded rendering
 
 ## Usage
 

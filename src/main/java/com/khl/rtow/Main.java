@@ -12,7 +12,6 @@ import com.khl.rtow.render.Scene;
 
 import javax.imageio.ImageIO;
 import java.io.File;
-import java.io.IOException;
 
 public class Main {
 
@@ -36,12 +35,12 @@ public class Main {
                 .setNumberOfSamples(50)
                 .build();
 
-        var renderedImage = renderer.render(randomScene(), camera, width, height);
-
         try {
+            var renderedImage = renderer.render(randomScene(), camera, width, height);
+
             ImageIO.write(renderedImage, "png", new File("render.png"));
-        } catch (IOException ioException) {
-            ioException.printStackTrace(System.err);
+        } catch (Exception exception) {
+            exception.printStackTrace(System.err);
         }
     }
 
@@ -49,6 +48,7 @@ public class Main {
         var scene = new Scene();
 
         // Generate foreground
+
         for (var a = -11; a < 11; a++) {
             for (var b = -11; b < 11; b++) {
                 var x = a + 0.9 * Math.random();
@@ -63,6 +63,7 @@ public class Main {
         }
 
         // Generate background
+
         var mat1 = new Dielectric(1.5);
         var mat2 = new Lambertian(new Vec(0.4, 0.2, 0.1));
         var mat3 = new Metal(new Vec(0.7, 0.6, 0.5), 0.0);
