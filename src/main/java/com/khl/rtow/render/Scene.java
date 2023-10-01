@@ -1,8 +1,8 @@
-package com.khl.trace.render;
+package com.khl.rtow.render;
 
-import com.khl.trace.geometry.Ray3;
-import com.khl.trace.hittable.HitRecord;
-import com.khl.trace.hittable.Hittable;
+import com.khl.rtow.hittable.HitRecord;
+import com.khl.rtow.hittable.Hittable;
+import com.khl.rtow.math.Ray3;
 
 import java.util.HashSet;
 import java.util.Iterator;

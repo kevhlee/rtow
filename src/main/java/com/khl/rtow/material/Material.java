@@ -1,8 +1,8 @@
-package com.khl.trace.material;
+package com.khl.rtow.material;
 
-import com.khl.trace.geometry.Ray3;
-import com.khl.trace.geometry.Vec3;
-import com.khl.trace.hittable.HitRecord;
+import com.khl.rtow.hittable.HitRecord;
+import com.khl.rtow.math.Ray3;
+import com.khl.rtow.math.Vec3;
 
 /**
  * The surface material of a hittable object.

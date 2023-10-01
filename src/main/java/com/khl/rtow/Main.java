@@ -1,14 +1,14 @@
-package com.khl.trace;
+package com.khl.rtow;
 
-import com.khl.trace.geometry.Vec3;
-import com.khl.trace.hittable.Sphere;
-import com.khl.trace.material.Dielectric;
-import com.khl.trace.material.Lambertian;
-import com.khl.trace.material.Material;
-import com.khl.trace.material.Metal;
-import com.khl.trace.render.Camera;
-import com.khl.trace.render.Renderer;
-import com.khl.trace.render.Scene;
+import com.khl.rtow.hittable.Sphere;
+import com.khl.rtow.material.Dielectric;
+import com.khl.rtow.material.Lambertian;
+import com.khl.rtow.material.Material;
+import com.khl.rtow.material.Metal;
+import com.khl.rtow.math.Vec3;
+import com.khl.rtow.render.Camera;
+import com.khl.rtow.render.Renderer;
+import com.khl.rtow.render.Scene;
 
 import javax.imageio.ImageIO;
 import java.awt.image.RenderedImage;

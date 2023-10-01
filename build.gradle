@@ -4,7 +4,6 @@ plugins {
 }
 
 group = 'com.khl'
-version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 targetCompatibility = '11'
 
@@ -22,5 +21,5 @@ test {
 }
 
 application {
-    mainClassName = 'com.khl.trace.Main'
+    mainClassName = 'com.khl.rtow.Main'
 }

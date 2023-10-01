@@ -1,7 +1,7 @@
-package com.khl.trace.render;
+package com.khl.rtow.render;
 
-import com.khl.trace.geometry.Ray3;
-import com.khl.trace.geometry.Vec3;
+import com.khl.rtow.math.Ray3;
+import com.khl.rtow.math.Vec3;
 
 /**
  * A 3D camera for rendering scenes.

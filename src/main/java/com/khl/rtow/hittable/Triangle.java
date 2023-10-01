@@ -1,8 +1,8 @@
-package com.khl.trace.hittable;
+package com.khl.rtow.hittable;
 
-import com.khl.trace.geometry.Ray3;
-import com.khl.trace.geometry.Vec3;
-import com.khl.trace.material.Material;
+import com.khl.rtow.material.Material;
+import com.khl.rtow.math.Ray3;
+import com.khl.rtow.math.Vec3;
 
 /**
  * A hittable triangle in 3D space.

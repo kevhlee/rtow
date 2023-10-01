@@ -1,4 +1,4 @@
-package com.khl.trace.geometry;
+package com.khl.rtow.math;
 
 /**
  * A 3D ray.

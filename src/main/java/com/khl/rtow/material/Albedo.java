@@ -1,6 +1,6 @@
-package com.khl.trace.material;
+package com.khl.rtow.material;
 
-import com.khl.trace.geometry.Vec3;
+import com.khl.rtow.math.Vec3;
 
 /**
  * An abstract base class for surface materials with albedo.

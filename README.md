@@ -1,6 +1,4 @@
-# weekend-tracer
-
-Implementation of "Ray Tracing in One Weekend" written in Java.
+# Ray Tracking in One Weekend in Java
 
 ![cover](https://user-images.githubusercontent.com/21070577/120865849-a8c69780-c543-11eb-92f0-56a78e979816.jpg)
 
