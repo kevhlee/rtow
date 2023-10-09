@@ -61,6 +61,8 @@ public class Renderer {
 
         camera.initialize(width, height);
 
+        printConfiguration(width, height, camera);
+
         var executor = Executors.newWorkStealingPool(numberOfThreads);
         var futures = new ArrayList<Future<Pixel>>();
 
@@ -143,6 +145,23 @@ public class Renderer {
 
     private double clamp(double a, double min, double max) {
         return Math.min(Math.max(a, min), max);
+    }
+
+    private void printConfiguration(int width, int height, Camera camera) {
+        System.out.println("### Camera configuration ###");
+        System.out.println("Origin: " + camera.getOrigin());
+        System.out.println("Aperture: " + camera.getAperture());
+        System.out.println("Field-of-view: " + camera.getFieldOfView());
+        System.out.println("Focus distance: " + camera.getFocusDistance());
+        System.out.println();
+
+        System.out.println("### Renderer configuration ###");
+        System.out.println("Image width: " + width);
+        System.out.println("Image height: " + height);
+        System.out.println("Max ray depth: " + getMaxRayDepth());
+        System.out.println("Number of samples: " + getNumberOfSamples());
+        System.out.println("Number of threads: " + getNumberOfThreads());
+        System.out.println();
     }
 
     private int toRGB(Vec color) {

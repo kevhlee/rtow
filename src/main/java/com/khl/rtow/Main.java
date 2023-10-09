@@ -33,8 +33,6 @@ public class Main {
                 .setNumberOfSamples(50)
                 .setNumberOfThreads(Runtime.getRuntime().availableProcessors());
 
-        printConfiguration(width, height, camera, renderer);
-
         try {
             var scene = randomScene();
             var image = renderer.render(scene, camera, width, height);
@@ -43,25 +41,6 @@ public class Main {
         } catch (Exception exception) {
             exception.printStackTrace(System.err);
         }
-    }
-
-    private static void printConfiguration(
-            int width, int height, Camera camera, Renderer renderer) {
-
-        System.out.println("### Camera configuration ###");
-        System.out.println("Origin: " + camera.getOrigin());
-        System.out.println("Aperture: " + camera.getAperture());
-        System.out.println("Field-of-view: " + camera.getFieldOfView());
-        System.out.println("Focus distance: " + camera.getFocusDistance());
-        System.out.println();
-
-        System.out.println("### Renderer configuration ###");
-        System.out.println("Image width: " + width);
-        System.out.println("Image height: " + height);
-        System.out.println("Max ray depth: " + renderer.getMaxRayDepth());
-        System.out.println("Number of samples: " + renderer.getNumberOfSamples());
-        System.out.println("Number of threads: " + renderer.getNumberOfThreads());
-        System.out.println();
     }
 
     private static Scene randomScene() {
